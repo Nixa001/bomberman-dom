@@ -59,5 +59,3 @@ export const createMapDom = () => {
 
   return mainContainer;
 };
-
-// Ajoutez la maquette au DOM
