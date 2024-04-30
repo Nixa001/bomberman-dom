@@ -1,28 +1,36 @@
-body{
-    overflow: hidden;
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  overflow: hidden;
+  display: flex;
+
 }
 .main-container {
-    display: flex;
-    flex-direction: column;
-    /* gap: 1px; */
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  /* gap: 1px; */
+  width: 100vw;
+  height: 100vh;
+  /* background: #eeeeee; */
+  justify-content: center;
+  align-items: center;
 }
 .line-container {
-    display: flex; /* Utiliser Flexbox pour aligner les éléments horizontalement */
-    flex-direction: row; /* Assurez-vous que les éléments sont alignés horizontalement */
-    /* gap: 1px; Espace entre les éléments de la ligne */
-    width: 80%; /* Largeur de la ligne */
-    /* height: 6%; */
+  display: flex; /* Utiliser Flexbox pour aligner les éléments horizontalement */
+  flex-direction: row; /* Assurez-vous que les éléments sont alignés horizontalement */
+  /* gap: 1px; Espace entre les éléments de la ligne */
+  width: 99%; /* Largeur de la ligne */
+  /* height: 6%; */
 }
 
 /* Exemple de style pour les éléments individuels */
-.mur, .bombe, .joueur {
-    width: 50px; /* Largeur des éléments */
-    height: 50px; /* Hauteur des éléments */
-    border: solid 1px rgb(133, 133, 133); /*
+.mur,
+.block,
+.joueur {
+  width: 50px; /* Largeur des éléments */
+  height: 50px; /* Hauteur des éléments */
+  border: solid 1px rgb(133, 133, 133); /*
  /* Position absolue pour les éléments */
 }
