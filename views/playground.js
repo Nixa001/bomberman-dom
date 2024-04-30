@@ -22,7 +22,7 @@ export const createMapDom = () => {
           element.style.backgroundColor = color.black;
           break;
         case 1:
-          let randonVal = Math.random() < 0.5 ? "A" : "B";
+          let randonVal = Math.random() < 0.7 ? "A" : "B";
           element = MyFrame.createDomElement("div", { class: "block" });
           randonVal === "A"
             ? (element.style.backgroundColor = color.yellow)
@@ -39,8 +39,8 @@ export const createMapDom = () => {
           break;
       }
       if (element) {
-        element.style.top = `${i * 50}px`;
-        element.style.left = `${j * 50}px`;
+        // element.style.top = `${i * 50}px`;
+        // element.style.left = `${j * 50}px`;
         element.style.width = `${80}px`;
         element.style.height = `${80}px`;
 

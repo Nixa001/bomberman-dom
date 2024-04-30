@@ -1,4 +1,5 @@
 import { MyFrame } from "./framework/miniframe.js";
+import { createChatInterface } from "./views/message.js";
 import { createMapDom } from "./views/playground.js";
 
 export let color = {
@@ -9,5 +10,7 @@ export let color = {
 };
 
 let myMap = createMapDom();
+let messageBox = createChatInterface()
 const body = document.querySelector("body");
 MyFrame.appendComponentToNode(myMap, body);
+MyFrame.appendComponentToNode(messageBox, body);
