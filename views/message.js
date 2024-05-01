@@ -1,3 +1,4 @@
+import { handleMessage } from "../controllers/messageController.js";
 import { MyFrame } from "../framework/miniframe.js";
 
 export function createChatInterface() {
@@ -19,7 +20,25 @@ export function createChatInterface() {
     MyFrame.createDomElement(
       "div",
       { class: "messages" },
-      MyFrame.createDomElement("div", { class: "messages-content" })
+      MyFrame.createDomElement("div",
+        { class: "messages-content" },
+        MyFrame.createDomElement(
+          "div",
+          { class: "message-box-contentSender" },
+
+          MyFrame.createDomElement(
+            "span",
+            { class: "message-box-contentSender" },
+            "Hello gamers"
+          ),
+
+          MyFrame.createDomElement(
+            "span",
+            { class: "message-nameSender" },
+            "gamer 1"
+          ),
+        ),
+      )
     ),
     MyFrame.createDomElement(
       "div",
@@ -36,6 +55,7 @@ export function createChatInterface() {
       )
     )
   );
-
+  const message = chat.querySelector(".message-submit");
+  MyFrame.attachEventHandler(message, "click", handleMessage);
   return chat;
 }
