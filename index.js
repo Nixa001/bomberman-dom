@@ -10,7 +10,10 @@ export let color = {
 };
 
 let myMap = createMapDom();
-let messageBox = createChatInterface()
+let messageBox = createChatInterface();
+let title = MyFrame.createDomElement("div", { class: "titleDiv" });
+
 const body = document.querySelector("body");
+MyFrame.appendComponentToNode(title, body);
 MyFrame.appendComponentToNode(myMap, body);
 MyFrame.appendComponentToNode(messageBox, body);

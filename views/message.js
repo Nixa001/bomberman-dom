@@ -11,7 +11,7 @@ export function createChatInterface() {
           "figure",
         { class: "avatar" },
         MyFrame.createDomElement("img", {
-          src: "https://icons8.com/icon/Khf81eSD686C/chat-group",
+          src: "../views/styles/assets/message-circle.svg",
         })
     ),
     MyFrame.createDomElement("h1", {}, "Chat"),

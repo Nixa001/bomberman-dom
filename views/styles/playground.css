@@ -1,14 +1,27 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 body {
   overflow: hidden;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   width: 100vw;
   height: 100vh;
+  background-color: #fcfefd;
+  /* background-image: url(./assets/floor.png); */
+}
+.titleDiv {
+  width: 100%;
+  height: 200px;
+  /* background: #000; */
+  background-position: center;
+  background-image: url(./assets/bomberman-logo.png);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .main-container {
   display: flex;
@@ -21,21 +34,45 @@ body {
   align-items: center;
 }
 .line-container {
-  display: flex; /* Utiliser Flexbox pour aligner les éléments horizontalement */
-  flex-direction: row; /* Assurez-vous que les éléments sont alignés horizontalement */
-  /* gap: 1px; Espace entre les éléments de la ligne */
-  width: 99%; /* Largeur de la ligne */
+  display: flex;
+  flex-direction: row;
+  width: 99%;
   /* height: 6%; */
 }
 
-/* Exemple de style pour les éléments individuels */
 .mur,
 .block,
 .joueur {
-  width: 50px; /* Largeur des éléments */
-  height: 50px; /* Hauteur des éléments */
-  border: solid 1px rgb(133, 133, 133); /*
- /* Position absolue pour les éléments */
+  width: 75px;
+  height: 75px;
+  border: solid 1px rgb(133, 133, 133);
+  
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mur {
+  /* background-color: #29282d; */
+  border: 1px solid #29282d;
+  background-image: url(./assets/wall/wall.png);
+}
+.joueur {
+  background-image: url(./assets/player/walk-front.png);
+  background-size:60px;
+  /* border: 1px solid rgba(128, 128, 128, 0.4); */
+}
+.block{
+  /* border: 1px solid rgba(128, 128, 128, 0.4); */
+}
+.blockA {
+  /* background-color: #f2b228; */
+  background-image: url(./assets/wall/wall_destructible.png);
+}
+
+.blockDestructible {
+  /* background-color: #f2b228; */
+  background-image: url(./assets/wall/wall_destructible.png);
 }
 
 /* MESSAGE BOX */
@@ -43,9 +80,12 @@ body {
 .chatBox {
   width: 25%;
   height: fit-content;
-  border: 1px solid;
+  border: 1px solid gray;
   border-radius: 5px;
-  background: #29282d;
+  background: rgba(255, 255, 255, 0.2);
+}
+.avatar{
+  color: #fcfefd;
 }
 
 .chat-title {
@@ -54,6 +94,7 @@ body {
   align-items: center;
   gap: 5px;
   padding: 5px;
+  background: #354A59;
 }
 
 .messages {
@@ -62,37 +103,38 @@ body {
   min-height: 600px;
   background: #fff;
 }
-.message-input{
+.message-input {
   width: 85%;
   height: 30px;
   font-size: 16px;
   padding: 5px;
   border: none;
-  border-top: 1px solid #29282d;
+  border: 1px solid #354A59;
   outline: none;
   resize: none;
-  background:white;
+  background: white;
   border-radius: 5px;
 }
 
-.message-box{
+.message-box {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /* background: #212025; */
 }
 
-.message-submit{
+.message-submit {
   width: 12%;
   height: 40px;
-  background: #f2b228;
+  background: #354A59;
   outline: none;
   font-size: 20px;
   font-weight: 600;
   border: none;
-  border: 5px;
+  border-radius: 5px;
   cursor: pointer;
-}
-.message-submit:hover{
   color: #fff;
-  background: #29282d;
+}
+.message-submit:hover {
+  background: #904c31;
 }

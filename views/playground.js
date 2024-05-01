@@ -19,30 +19,43 @@ export const createMapDom = () => {
       switch (myMap[i][j]) {
         case 0:
           element = MyFrame.createDomElement("div", { class: "mur" });
-          element.style.backgroundColor = color.black;
+          // element.style.backgroundColor = color.black;
           break;
         case 1:
           let randonVal = Math.random() < 0.7 ? "A" : "B";
-          element = MyFrame.createDomElement("div", { class: "block" });
           randonVal === "A"
-            ? (element.style.backgroundColor = color.yellow)
-            : (element.style.backgroundColor = color.white);
+            ? (element = MyFrame.createDomElement("div", {
+                class: "block blockA",
+              }))
+            : (element = MyFrame.createDomElement("div", {
+                class: "block blockB",
+              }));
           break;
         case 2:
-          element = MyFrame.createDomElement("div", { class: "joueur" });
-          element.style.backgroundColor = color.white;
+          element = MyFrame.createDomElement("div", {
+            class: "block blockB",
+          });
+            // element.style.backgroundColor = color.white;
           break;
 
         case 3:
-          element = MyFrame.createDomElement("div", { class: "block" });
-          element.style.backgroundColor = color.yellow;
+          element = MyFrame.createDomElement("div", {
+            class: "block blockDestructible",
+          });
+          // element.style.backgroundColor = color.yellow;
+          break;
+        case 4:
+          element = MyFrame.createDomElement("div", {
+            class: "joueur",
+          });
+          // element.style.backgroundColor = color.yellow;
           break;
       }
       if (element) {
         // element.style.top = `${i * 50}px`;
         // element.style.left = `${j * 50}px`;
-        element.style.width = `${80}px`;
-        element.style.height = `${80}px`;
+        // element.style.width = `${80}px`;
+        // element.style.height = `${80}px`;
 
         lineContainer.appendChild(element);
       }
