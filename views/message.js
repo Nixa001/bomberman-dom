@@ -8,13 +8,13 @@ export function createChatInterface() {
       "div",
       { class: "chat-title" },
       MyFrame.createDomElement(
-          "figure",
+        "figure",
         { class: "avatar" },
         MyFrame.createDomElement("img", {
           src: "../views/styles/assets/message-circle.svg",
         })
-    ),
-    MyFrame.createDomElement("h1", {}, "Chat"),
+      ),
+      MyFrame.createDomElement("h1", {}, "Chat")
     ),
     MyFrame.createDomElement(
       "div",
