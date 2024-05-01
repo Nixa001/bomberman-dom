@@ -47,7 +47,7 @@ body {
   height: 75px;
   border: solid 1px rgb(133, 133, 133);
   
-  background-size: contain;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -94,7 +94,8 @@ body {
   align-items: center;
   gap: 5px;
   padding: 5px;
-  background: #354A59;
+  background-image: url(./assets/wall/wall.png);
+  background-size: contain;
 }
 
 .messages {
@@ -104,7 +105,7 @@ body {
   background: #fff;
 }
 .message-input {
-  width: 85%;
+  width: 80%;
   height: 30px;
   font-size: 16px;
   padding: 5px;
@@ -119,14 +120,15 @@ body {
 .message-box {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   /* background: #212025; */
 }
 
 .message-submit {
-  width: 12%;
+  width: 16%;
   height: 40px;
-  background: #354A59;
+  background-image: url(./assets/wall/wall_destructible.png);
+  background-size: contain;
   outline: none;
   font-size: 20px;
   font-weight: 600;
@@ -136,5 +138,5 @@ body {
   color: #fff;
 }
 .message-submit:hover {
-  background: #904c31;
+  background-image: url(./assets/wall/wall.png);
 }
