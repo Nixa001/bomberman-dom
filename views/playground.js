@@ -1,9 +1,17 @@
+import { game } from "../controllers/game.js";
 import { createMap } from "../controllers/maps/maps.js";
+import { Player } from "../controllers/player/joueur.js";
+import {
+  getPositionRelativeToParent,
+  getPositionRelativeToParentElem,
+} from "../controllers/utils/getPosition.js";
 import { MyFrame } from "../framework/miniframe.js";
 import { color } from "../index.js";
 
 export const createMapDom = () => {
   let myMap = createMap();
+  let isPosPlayer = false;
+  let mapPositionPlayer = [];
   console.log(myMap);
   let mainContainer = MyFrame.createDomElement("div", {
     class: "main-container",
@@ -35,7 +43,7 @@ export const createMapDom = () => {
           element = MyFrame.createDomElement("div", {
             class: "block blockB",
           });
-            // element.style.backgroundColor = color.white;
+          // element.style.backgroundColor = color.white;
           break;
 
         case 3:
@@ -46,9 +54,19 @@ export const createMapDom = () => {
           break;
         case 4:
           element = MyFrame.createDomElement("div", {
-            class: "joueur",
+            class: "block blockB",
           });
-          // element.style.backgroundColor = color.yellow;
+          if (element && mainContainer) {
+            console.log("---", element);
+            setTimeout(() => {
+              let positionPlayer = getPositionRelativeToParentElem(
+                element,
+                mainContainer
+              );
+              mapPositionPlayer.push(positionPlayer);
+              // console.log("aaaaaaaaaaaaaaaaa ", mapPositionPlayer);
+            }, 0);
+          }
           break;
       }
       if (element) {
@@ -72,5 +90,32 @@ export const createMapDom = () => {
     mainContainer.appendChild(lineContainer);
   }
 
+  let pseudo = "ibg";
+  let x = 0,
+    y = 0;
+  let a = MyFrame.createDomElement("div", {
+    className: `player ${pseudo}`,
+    id: "player",
+  });
+  let joueur = new Player("ibg", x, y, a);
+  // console.log(joueur);
+  mainContainer.appendChild(joueur.player);
+
+  document.addEventListener("keydown", (event) => {
+    game(event, joueur.player);
+    let positionPlayer = getPositionRelativeToParent();
+    console.log("Position du player = ", positionPlayer);
+  });
+
+  // console.log(mapPositionPlayer);
+  mapPositionPlayer.map((elementPosition) => {
+    console.log("position = ", elementPosition);
+  });
+
+  if (mapPositionPlayer) {
+    for (const iterator of mapPositionPlayer) {
+      console.log("==== ", iterator);
+    }
+  }
   return mainContainer;
 };

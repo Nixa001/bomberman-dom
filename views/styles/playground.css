@@ -84,11 +84,10 @@ body {
 
 .mur,
 .block,
-.joueur {
+#player {
   width: 75px;
   height: 75px;
   border: solid 1px rgb(133, 133, 133);
-
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -99,9 +98,10 @@ body {
   border: 1px solid #29282d;
   background-image: url(./assets/wall/wall.png);
 }
-.joueur {
+#player {
+  position: absolute;
   background-image: url(./assets/player/walk-front.png);
-  background-size: 60px;
+  background-size: 50px;
   /* border: 1px solid rgba(128, 128, 128, 0.4); */
 }
 .block {
