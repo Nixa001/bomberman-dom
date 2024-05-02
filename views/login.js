@@ -1,3 +1,4 @@
+import { handleLogin } from "../controllers/login/login.js";
 import { MyFrame } from "../framework/miniframe.js";
 
 export function loginInterface() {
@@ -16,7 +17,9 @@ export function loginInterface() {
 
   const formElement = MyFrame.createDomElement(
     "form",
-    { class: "formDiv" },
+    { class: "formDiv",
+    onSubmit : handleLogin
+  },
     headingElement,
     headingElement2,
     inputElement
@@ -27,6 +30,5 @@ export function loginInterface() {
     { class: "loginDiv" },
     formElement
   );
-
   return loginDiv;
 }

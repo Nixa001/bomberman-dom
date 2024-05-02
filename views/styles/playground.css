@@ -101,7 +101,7 @@ body {
 }
 .joueur {
   background-image: url(./assets/player/walk-front.png);
-  background-size: 60px;
+  background-size:45px;
   /* border: 1px solid rgba(128, 128, 128, 0.4); */
 }
 .block {

@@ -1,5 +1,7 @@
-import { handleMessage } from "../controllers/messageController.js";
+import { handleMessage } from "../controllers/message/messageController.js";
 import { MyFrame } from "../framework/miniframe.js";
+import { creaBomb } from "./bomb.js";
+
 
 export function createChatInterface() {
   const chat = MyFrame.createDomElement(
@@ -50,12 +52,14 @@ export function createChatInterface() {
       }),
       MyFrame.createDomElement(
         "button",
-        { type: "submit", class: "message-submit" },
+        {
+          type: "submit",
+          class: "message-submit",
+          onClick : handleMessage
+        },
         "Send"
       )
     )
   );
-  const message = chat.querySelector(".message-submit");
-  MyFrame.attachEventHandler(message, "click", handleMessage);
   return chat;
 }
