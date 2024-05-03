@@ -65,6 +65,28 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
 }
+.game-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  /* padding: 10px; */
+  background-color: #fcfefd; /* Utilise la couleur définie dans index.js */
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.time, .life, .players {
+  font-size: 18px;
+  color: #29282d; /* Utilise la couleur définie dans index.js */
+}
+
+.time {
+  margin-right: 20px;
+}
+
+.life {
+  margin-right: 20px;
+}
 .main-container {
   display: flex;
   flex-direction: column;
