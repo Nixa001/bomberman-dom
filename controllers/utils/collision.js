@@ -1,6 +1,7 @@
 export const collision = (entity1, entity2) => {
-  const rect1 = entity1.el.getBoundingClientRect();
-  const rect2 = entity2.el.getBoundingClientRect();
+  const rect1 = entity1.getBoundingClientRect();
+  const rect2 = entity2.getBoundingClientRect();
+
   return !(
     rect1.right < rect2.left ||
     rect1.left > rect2.right ||

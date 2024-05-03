@@ -11,28 +11,32 @@ export const createPlayer = (joueurs) => {
 };
 
 export class Player {
-    constructor(pseudo, x, y, player) {
-      this.pseudo = pseudo;
-      this.x = x;
-      this.y = y;
-      this.player = player
-    }
-  
-    
-    moveUp() {
-      this.y--;
-    }
+  constructor(pseudo, x, y, player) {
+    this.pseudo = pseudo;
+    this.x = x;
+    this.y = y;
+    this.player = player;
+    this.positionPlayer(); 
+  }
 
-    moveDown() {
-      this.y++;
-    }
+  positionPlayer() {
+    this.player.style.left = `${this.x}px`;
+    this.player.style.top = `${this.y}px`;
+  }
 
-    moveLeft() {
-      this.x--;
-    }
+  moveUp() {
+    this.y--;
+  }
 
-    moveRight() {
-      this.x++;
-    }
-  
+  moveDown() {
+    this.y++;
+  }
+
+  moveLeft() {
+    this.x--;
+  }
+
+  moveRight() {
+    this.x++;
+  }
 }

@@ -43,11 +43,11 @@ body {
 }
 
 .mur,
-.block,
-#player {
+.block {
   width: 75px;
   height: 75px;
   border: solid 1px rgb(133, 133, 133);
+
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -60,11 +60,14 @@ body {
 }
 #player {
   position: absolute;
+  border: solid 1px red;
+
+  width: 55px;
+  height: 55px;
   background-image: url(./assets/player/walk-front.png);
-  background-size: 50px;
-  /* border: 1px solid rgba(128, 128, 128, 0.4); */
-}
-.block {
+  background-size: 60px;
+  background-repeat: no-repeat;
+  background-position: center;
   /* border: 1px solid rgba(128, 128, 128, 0.4); */
 }
 .blockA {

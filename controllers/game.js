@@ -1,8 +1,8 @@
 import { movePlayer } from "./player/move.js";
+import { collision } from "./utils/collision.js";
 
 export const game = (event, joueurElement) => {
-  
-    if (joueurElement) {
+  if (joueurElement) {
     //   console.log("joueur = ", joueurElement);
     const currentPosition =
       joueurElement.style.transform.match(/translate\(([^)]+)\)/);
@@ -14,23 +14,30 @@ export const game = (event, joueurElement) => {
       y = parseInt(currentPosition[1].split(",")[1]);
     }
 
+    let newX = x,
+      newY = y;
+
     switch (event.key) {
       case "ArrowLeft":
-        movePlayer(joueurElement, x - 10, y);
+        newX -= 10;
         break;
       case "ArrowRight":
-        movePlayer(joueurElement, x + 10, y);
+        newX += 10;
         break;
       case "ArrowUp":
-        movePlayer(joueurElement, x, y - 10);
+        newY -= 10;
         break;
       case "ArrowDown":
-        movePlayer(joueurElement, x, y + 10);
+        newY += 10;
         break;
       default:
         break;
     }
+    // const targetBlock = document.elementFromPoint(newX, newY);
+    // console.log(targetBlock);
+    // if (targetBlock && targetBlock.classList.contains("blockWhite")) {
+    // }
+    movePlayer(joueurElement, newX, newY);
   }
-//   console.log(event.key);
+  //   console.log(event.key);
 };
-// document.addEventListener("keydown", game);
