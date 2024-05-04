@@ -1,42 +1,16 @@
 import { MyFrame } from "../../framework/miniframe.js";
-
-export const createPlayer = (joueurs) => {
-  console.log(joueurs);
-  return joueurs.map((element) => {
-    return MyFrame.createDomElement("div", {
-      className: `player ${element.pseudo}`,
-      id: "player",
-    });
-  });
-};
+import { CELL_SIZE } from "../../views/constants.js";
 
 export class Player {
-  constructor(pseudo, x, y, player) {
-    this.pseudo = pseudo;
+  constructor(id, x, y) {
+    this.id = id;
     this.x = x;
     this.y = y;
-    this.player = player;
-    this.positionPlayer(); 
-  }
-
-  positionPlayer() {
-    this.player.style.left = `${this.x}px`;
-    this.player.style.top = `${this.y}px`;
-  }
-
-  moveUp() {
-    this.y--;
-  }
-
-  moveDown() {
-    this.y++;
-  }
-
-  moveLeft() {
-    this.x--;
-  }
-
-  moveRight() {
-    this.x++;
+    this.element = MyFrame.createDomElement("div", {});
+    this.element.classList.add("player");
+    this.element.style.left = this.x * CELL_SIZE + "px";
+    this.element.style.top = this.y * CELL_SIZE + "px";
+    let gameContainer = document.querySelector("#game-container");
+    MyFrame.appendComponentToNode(this.element, gameContainer);
   }
 }

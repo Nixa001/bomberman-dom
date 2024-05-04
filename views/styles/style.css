@@ -1,0 +1,59 @@
+/* CSS for game elements */
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  background: beige;
+}
+
+.titleDiv {
+  width: 100%;
+  height: 200px;
+  background-image: url(./assets/bomberman-logo.png);
+  background-size: contain;
+  border: 1px solid;
+}
+.game-container {
+  position: relative;
+  width: 900px;
+  height: 660px;
+  border: 1px solid black;
+}
+.cell {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 1px solid #29282d;
+  background-size: cover;
+}
+.wall {
+  /* background-color: #29282d; */
+  background-image: url(./assets/wall/wall.png);
+}
+.block {
+  /* background-color: #f2b228; */
+  background-image: url(./assets/wall/wall_destructible.png);
+}
+.player {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  /* background: #29282d; */
+  background-image: url(./assets/player/walk-front.png);
+  background-size: 40px;
+}
+
+.titleDiv,
+.cell,
+.player {
+  background-repeat: no-repeat;
+  background-position: center;
+}
