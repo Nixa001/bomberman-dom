@@ -28,7 +28,7 @@ export const createMapDom = () => {
           // element.style.backgroundColor = color.black;
           break;
         case 1:
-          let randonVal = Math.random() < 0.7 ? "A" : "B";
+          let randonVal = Math.random() < 0.1 ? "A" : "B";
           randonVal === "A"
             ? (element = MyFrame.createDomElement("div", {
                 class: "block blockDestructible",
@@ -77,7 +77,6 @@ export const createMapDom = () => {
         // element.style.left = `${j * 50}px`;
         // element.style.width = `${80}px`;
         // element.style.height = `${80}px`;
-
         lineContainer.appendChild(element);
       }
       element.style.border = `1px solid ${color.black}`;
@@ -96,7 +95,7 @@ export const createMapDom = () => {
   let pseudo = "ibg";
 
   let a = MyFrame.createDomElement("div", {
-    className: `player ${pseudo}`,
+    class: `player ${pseudo}`,
     id: "player",
   });
   setTimeout(() => {

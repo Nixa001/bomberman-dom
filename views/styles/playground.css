@@ -62,8 +62,8 @@ body {
   position: absolute;
   border: solid 1px red;
 
-  width: 55px;
-  height: 55px;
+  width: 50px;
+  height: 50px;
   background-image: url(./assets/player/walk-front.png);
   background-size: 60px;
   background-repeat: no-repeat;

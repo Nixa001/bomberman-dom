@@ -32,4 +32,4 @@ const body = document.querySelector("body");
 // MyFrame.appendComponentToNode( loginInterface(), body);
 MyFrame.appendComponentToNode(title, body);
 MyFrame.appendComponentToNode(myMap, body);
-MyFrame.appendComponentToNode(messageBox, body);
+// MyFrame.appendComponentToNode(messageBox, body);
