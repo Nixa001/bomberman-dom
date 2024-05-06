@@ -28,12 +28,5 @@ export function renderMap() {
       MyFrame.appendComponentToNode(gameContainer, body);
     }
   }
-
-  MyFrame.attachEventHandler(document, "keydown", eventHandler);
 }
 
-function placeBomb(player) {
-  console.log(
-    player.id + " placed a bomb at (" + player.x + ", " + player.y + ")"
-  );
-}

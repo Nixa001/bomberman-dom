@@ -19,7 +19,6 @@ body {
   height: 200px;
   background-image: url(./assets/bomberman-logo.png);
   background-size: contain;
-  border: 1px solid;
 }
 .game-container {
   position: relative;
@@ -27,12 +26,29 @@ body {
   height: 660px;
   border: 1px solid black;
 }
-.cell {
+
+.bomb,
+.bombExplosed {
   position: absolute;
   width: 60px;
   height: 60px;
-  border: 1px solid #29282d;
   background-size: cover;
+  z-index: -1;
+}
+.bomb {
+  background-image: url(./assets/bomb.png);
+  animation: bombAnimation 2s infinite;
+}
+.bombExplosed {
+  /* visibility: visible; */
+  /* display: block; */
+  z-index: 1;
+  background-image: url(./assets/explosion.gif);
+}
+.cell {
+  position: absolute;
+  background-size: cover;
+  border: 1px solid #29282d;
 }
 .wall {
   /* background-color: #29282d; */
@@ -44,16 +60,35 @@ body {
 }
 .player {
   position: absolute;
-  width: 60px;
-  height: 60px;
+
   /* background: #29282d; */
   background-image: url(./assets/player/walk-front.png);
   background-size: 40px;
 }
 
-.titleDiv,
 .cell,
 .player {
+  width: 60px;
+  height: 60px;
+}
+
+.titleDiv,
+.cell,
+.player,
+.bomb,
+.bombExplosed {
   background-repeat: no-repeat;
   background-position: center;
+}
+
+@keyframes bombAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.33);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
