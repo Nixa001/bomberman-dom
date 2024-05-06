@@ -37,12 +37,31 @@ export function movePlayer(player, direction) {
     case "right":
       newX = player.x + 1;
       break;
+    case " ":
+      placeBomb(players[0]);
+      break;
   }
   if (map[newY][newX] !== 0 && map[newY][newX] !== 1) {
     player.x = newX;
     player.y = newY;
-    // Update player position on the screen
     player.element.style.left = player.x * CELL_SIZE + "px";
     player.element.style.top = player.y * CELL_SIZE + "px";
   }
+}
+
+const BOMB_TIMER = 3000;
+
+function placeBomb(player) {
+  const bomb = document.createElement("div");
+  bomb.classList.add("bomb");
+  bomb.style.left = player.x * CELL_SIZE + "px";
+  bomb.style.top = player.y * CELL_SIZE + "px";
+  document.getElementById("game-container").appendChild(bomb);
+
+  setTimeout(() => explodeBomb(bomb), BOMB_TIMER);
+}
+
+function explodeBomb(bomb) {
+  bomb.classList.add("bombExplosed");
+  setTimeout(() => bomb.remove(), 1100);
 }

@@ -1,4 +1,5 @@
 import { Player } from "./controllers/player/joueur.js";
+import { eventHandler } from "./controllers/player/move.js";
 import { MyFrame } from "./framework/miniframe.js";
 import { players } from "./views/constants.js";
 import { loginInterface } from "./views/login.js";
@@ -18,4 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderMap();
   players.push(new Player(1, player1Pos.x, player1Pos.y));
   MyFrame.appendComponentToNode(messageBox, body);
+  updateGame();
 });
+
+function updateGame() {
+  MyFrame.attachEventHandler(document, "keydown", eventHandler);
+
+  requestAnimationFrame(updateGame);
+}

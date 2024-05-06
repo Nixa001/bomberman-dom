@@ -17,7 +17,7 @@ export function renderMap() {
       if (map[i][j] === 0) {
         cell.classList.add("wall");
       } else if (map[i][j] === 1) {
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.2) {
           cell.classList.add("block");
         } else {
           map[i][j] = 2;
@@ -28,12 +28,5 @@ export function renderMap() {
       MyFrame.appendComponentToNode(gameContainer, body);
     }
   }
-
-  MyFrame.attachEventHandler(document, "keydown", eventHandler);
 }
 
-function placeBomb(player) {
-  console.log(
-    player.id + " placed a bomb at (" + player.x + ", " + player.y + ")"
-  );
-}
