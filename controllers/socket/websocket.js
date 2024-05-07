@@ -1,21 +1,22 @@
 import { readMessageFromServer, sendMessageToServer } from "./utils.js";
 
+export let socket
 export function initializeWebSocket() {
-   const socket = new WebSocket('ws://localhost:8080/ws');
+ socket = new WebSocket('ws://localhost:8080/ws');
 
    socket.addEventListener('open', (event) => {
       console.log('Connexion établie avec le serveur');
       // Utilisation de la fonction sendMessage
-      sendMessageToServer(socket, {
+      sendMessageToServer({
          type: 'login',
          content: 'toto'
       });
    });
 
-   readMessageFromServer(socket, (event) => {
+   readMessageFromServer((event) => {
       console.log('Message reçu du serveur:', event.data);
    });
-
+e
    socket.addEventListener('error', (event) => {
       console.error('Erreur de connexion:', event);
    });

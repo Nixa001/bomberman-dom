@@ -1,5 +1,7 @@
 import { Player } from "./controllers/player/joueur.js";
 import { eventHandler } from "./controllers/player/move.js";
+import { readMessageFromServer } from "./controllers/socket/utils.js";
+import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
 import { players } from "./views/constants.js";
 import { loginInterface } from "./views/login.js";
@@ -13,13 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let messageBox = createChatInterface();
   let title = MyFrame.createDomElement("div", { class: "titleDiv" });
   const body = document.querySelector("body");
-
-  // MyFrame.appendComponentToNode( loginInterface(), body);
-  MyFrame.appendComponentToNode(title, body);
-  renderMap();
-  players.push(new Player(1, player1Pos.x, player1Pos.y));
-  MyFrame.appendComponentToNode(messageBox, body);
-  updateGame();
+  MyFrame.appendComponentToNode( loginInterface(), body);
+  readMessageFromServer((event) => {
+    
+  })
+  // MyFrame.appendComponentToNode(title, body);
+  // renderMap();
+  // players.push(new Player(1, player1Pos.x, player1Pos.y));
+  // MyFrame.appendComponentToNode(messageBox, body);
+  // updateGame();
 });
 
 function updateGame() {
@@ -27,3 +31,4 @@ function updateGame() {
 
   requestAnimationFrame(updateGame);
 }
+initializeWebSocket();

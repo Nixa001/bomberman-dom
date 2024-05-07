@@ -16,6 +16,8 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+var Gamers []websocket.Conn
+
 type MessageStruct struct {
 	Type    string `json:"type"`
 	Content string `json:"content"`
@@ -51,11 +53,3 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func StartServer() {
-	http.HandleFunc("/ws", handleConnections)
-
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		panic("Erreur lors du démarrage du serveur: " + err.Error())
-	}
-}

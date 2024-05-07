@@ -121,35 +121,6 @@ body {
   /* background: #212025; */
 }
 
-.messages-content {}
-
-.message-box-contentSender,
-.message-nameSender {
-  margin-top: 5px !important;
-  margin-bottom: 5px !important;
-
-}
-
-.message-box-contentSender {
-  background: #223a4f;
-  color: #fff !important;
-  border-radius: 20px 20px;
-  display: block;
-  max-width: 70%;
-  padding: 7px 13px 7px 13px;
-  float: left;
-}
-
-.message-nameSender {
-  background: #f1f1f1;
-  color: #000 !important;
-  border-radius: 20px 20px 20px;
-  display: block;
-  max-width: 70%;
-  padding: 7px 13px 7px 13px;
-  float: right;
-}
-
 
 .message-submit {
   width: 16%;
