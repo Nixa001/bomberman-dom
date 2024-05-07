@@ -5,7 +5,7 @@ export function loginInterface() {
   const headingElement = MyFrame.createDomElement(
     "h1",
     { class: "titleLogin" },
-    "Welcom to"
+    "Let's play to"
   );
   let headingElement2 = MyFrame.createDomElement("div", { class: "titleDiv" });
 

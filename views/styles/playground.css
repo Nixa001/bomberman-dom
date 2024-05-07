@@ -11,82 +11,13 @@ body {
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: #fcfefd;
+  background-color: beige;
   /* background-image: url(./assets/floor.png); */
-}
-
-.loginDiv {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(40px);
-}
-.formDiv {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 500px;
-  height: 600px;
-  /* background: #29282d; */
-  background-image: url(./assets/wall/wall.png);
   background-size: 80px;
-  border: 1px solid #29282d;
-  border-radius: 5px;
-  gap: 10px;
-  color: #fcfefd;
-}
-
-.titleLogin {
-  font-size: 60px;
-}
-
-.inputLogin {
-  color: #29282d;
-  width: 70%;
-  height: 50px;
-  text-align: center;
-  font-size: 25px;
-  font-weight: 800;
-  border: 1px solid #29282d;
-  border-radius: 5px;
-}
-
-.titleDiv {
-  width: 100%;
-  height: 200px;
-  /* background: #000; */
   background-position: center;
-  background-image: url(./assets/bomberman-logo.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.game-info {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  /* padding: 10px; */
-  background-color: #fcfefd; /* Utilise la couleur définie dans index.js */
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.time, .life, .players {
-  font-size: 18px;
-  color: #29282d; /* Utilise la couleur définie dans index.js */
-}
 
-.time {
-  margin-right: 20px;
-}
-
-.life {
-  margin-right: 20px;
-}
 .main-container {
   display: flex;
   flex-direction: column;
@@ -99,14 +30,12 @@ body {
 }
 .line-container {
   display: flex;
-  flex-direction: row;
   width: 99%;
   /* height: 6%; */
 }
 
 .mur,
-.block,
-.joueur {
+.block {
   width: 75px;
   height: 75px;
   border: solid 1px rgb(133, 133, 133);
@@ -121,12 +50,16 @@ body {
   border: 1px solid #29282d;
   background-image: url(./assets/wall/wall.png);
 }
-.joueur {
+#player {
+  position: absolute;
+  border: solid 1px red;
+
+  width: 50px;
+  height: 50px;
   background-image: url(./assets/player/walk-front.png);
-  background-size:45px;
-  /* border: 1px solid rgba(128, 128, 128, 0.4); */
-}
-.block {
+  background-size: 60px;
+  background-repeat: no-repeat;
+  background-position: center;
   /* border: 1px solid rgba(128, 128, 128, 0.4); */
 }
 .blockA {

@@ -1,0 +1,42 @@
+.loginDiv {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(2px);
+}
+.formDiv {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  height: 600px;
+  /* background: #29282d; */
+  background-image: url(./assets/wall/wall.png);
+  background-size: 80px;
+  border: 1px solid #29282d;
+  border-radius: 5px;
+  gap: 10px;
+  color: #fcfefd;
+}
+
+.titleLogin {
+  font-size: 60px;
+  font-weight: 500;
+  font-style: oblique;
+}
+
+.inputLogin {
+  color: #29282d;
+  width: 70%;
+  height: 50px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 800;
+  border: 1px solid #29282d;
+  border-radius: 5px;
+}
