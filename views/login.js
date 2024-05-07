@@ -12,6 +12,7 @@ export function loginInterface() {
   const inputElement = MyFrame.createDomElement("input", {
     type: "text",
     class: "inputLogin",
+    name : "inputLogin",
     placeholder: "Your pseudo ...",
   });
 
@@ -30,5 +31,5 @@ export function loginInterface() {
     { class: "loginDiv" },
     formElement
   );
-  return loginDiv;
+  return loginDiv; 
 }
