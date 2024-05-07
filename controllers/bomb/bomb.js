@@ -6,10 +6,8 @@ export const BOMB_TIMER = 3000;
 export function placeBomb(player) {
   const cellToExplode = [];
 
-  // Place la bombe initiale
   cellToExplode.push(createBomb(player.x, player.y));
 
-  // Place des bombes sur les quatre côtés
   for (let index = 1; index <= 4; index++) {
     let xPos = player.x + (index === 1 ? 1 : index === 2 ? -1 : 0);
     let yPos = player.y + (index === 3 ? 1 : index === 4 ? -1 : 0);
