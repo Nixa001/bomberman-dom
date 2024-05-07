@@ -21,7 +21,9 @@ export function placeBomb(player) {
 }
 
 function createBomb(x, y, initial = true) {
-  const bomb = MyFrame.createDomElement("div", { class: "bomb" });
+  const bomb = document.createElement("div");
+  bomb.classList.add("bomb");
+
   bomb.style.left = x * CELL_SIZE + "px";
   bomb.style.top = y * CELL_SIZE + "px";
 

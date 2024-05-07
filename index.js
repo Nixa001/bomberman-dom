@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function updateGame() {
+  // renderMap();
   MyFrame.attachEventHandler(document, "keydown", eventHandler);
 
   requestAnimationFrame(updateGame);
