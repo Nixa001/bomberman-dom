@@ -2,8 +2,14 @@ import { MyFrame } from "../../framework/miniframe.js";
 import { CELL_SIZE, map } from "../../views/constants.js";
 
 export const BOMB_TIMER = 3000;
+export let canPlaceBomb = false;
 
 export function placeBomb(player) {
+  if (canPlaceBomb) {
+    return;
+  }
+
+  canPlaceBomb = true;
   const cellToExplode = [];
 
   cellToExplode.push(createBomb(player.x, player.y));
@@ -16,8 +22,10 @@ export function placeBomb(player) {
       cellToExplode.push(createBomb(xPos, yPos, false));
     }
   }
-
-  setTimeout(() => explodeBomb(cellToExplode), BOMB_TIMER);
+  setTimeout(() => {
+    explodeBomb(cellToExplode);
+    canPlaceBomb = false;
+  }, BOMB_TIMER);
 }
 
 function createBomb(x, y, initial = true) {
@@ -89,11 +97,12 @@ function explodeBomb(cellToExplode) {
         x: parseInt(bomb.style.left) / CELL_SIZE,
         y: parseInt(bomb.style.top) / CELL_SIZE,
       };
-      //   const explosionRadius = 1;
       if (isInitBomb) {
         replaceBlock(explosionPosition);
         isInitBomb = false;
       }
     }, 1100);
   });
+
+  canPlaceBomb = false; 
 }
