@@ -19,9 +19,19 @@ var upgrader = websocket.Upgrader{
 var Gamers []websocket.Conn
 
 type MessageStruct struct {
-	Type    string `json:"type"`
-	Content string `json:"content"`
+	Type    string  `json:"type"`
+	Content Message `json:"content"`
 }
+type Message struct {
+	Id     int    `json:"id"`
+	Pseudo string `json:"pseudo"`
+}
+type Player struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// var idplayer = 0
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -42,14 +52,15 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println("msg", m)
-		var data = map[string]string{
-			"connection": "test",
-			"message": "test",
-		}
-		if err := ws.WriteJSON(data); err != nil {
-			break
+		fmt.Println("m", m)
+		if m.Type == "login" {
+			var player Player
+			player.Id = m.Content.Id
+			player.Name = m.Content.Pseudo
+			// idplayer++
+			if err := ws.WriteJSON(player); err != nil {
+				break
+			}
 		}
 	}
 }
-
