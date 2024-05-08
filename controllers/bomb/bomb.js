@@ -1,4 +1,5 @@
 import { MyFrame } from "../../framework/miniframe.js";
+import { players } from "../../views/constants.js";
 import { CELL_SIZE, map } from "../../views/constants.js";
 
 export const BOMB_TIMER = 3000;
@@ -85,8 +86,38 @@ function calculateDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
+let playerLive = 3;
 function explodeBomb(cellToExplode) {
   let isInitBomb = true;
+  let isFirstTimeExplosed = true;
+
+  const intervalId = setInterval(() => {
+    players.forEach((player) => {
+      cellToExplode.forEach((bomb) => {
+        const bombPosition = {
+          x: parseInt(bomb.style.left) / CELL_SIZE,
+          y: parseInt(bomb.style.top) / CELL_SIZE,
+        };
+        if (
+          player.x === bombPosition.x &&
+          player.y === bombPosition.y &&
+          isFirstTimeExplosed
+        ) {
+          console.log("Explose");
+          playerLive--;
+          if (playerLive == 0) {
+            alert("Vous avez perdu");
+          }
+          isFirstTimeExplosed = false;
+          return;
+        }
+      });
+    });
+  }, 200);
+
+  setTimeout(() => {
+    clearInterval(intervalId);
+  }, 1100);
 
   cellToExplode.forEach((bomb) => {
     document.getElementById("game-container").appendChild(bomb);
@@ -104,5 +135,5 @@ function explodeBomb(cellToExplode) {
     }, 1100);
   });
 
-  canPlaceBomb = false; 
+  canPlaceBomb = false;
 }
