@@ -25,6 +25,21 @@ document.addEventListener("DOMContentLoaded", () => {
 function updateGame() {
   // renderMap();
   MyFrame.attachEventHandler(document, "keydown", eventHandler);
+  // players.forEach((player) => {
+  //   cellToExplode.forEach((bomb) => {
+  //     const bombPosition = {
+  //       x: parseInt(bomb.style.left) / CELL_SIZE,
+  //       y: parseInt(bomb.style.top) / CELL_SIZE,
+  //     };
+  //     if (player.x === bombPosition.x && player.y === bombPosition.y) {
+  //       console.log("Explose");
+  //       player.lives--;
+  //       if (player.lives <= 0) {
+  //         alert("Vous avez perdu !");
+  //       }
+  //     }
+  //   });
+  // });
 
   requestAnimationFrame(updateGame);
 }

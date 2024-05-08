@@ -4,6 +4,8 @@ import { CELL_SIZE, map } from "../../views/constants.js";
 
 export const BOMB_TIMER = 3000;
 export let canPlaceBomb = false;
+// export let cellToExplode = [];
+let playerLive = 3;
 
 export function placeBomb(player) {
   if (canPlaceBomb) {
@@ -86,7 +88,6 @@ function calculateDistance(x1, y1, x2, y2) {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
-let playerLive = 3;
 function explodeBomb(cellToExplode) {
   let isInitBomb = true;
   let isFirstTimeExplosed = true;

@@ -17,7 +17,7 @@ export function renderMap() {
       if (map[i][j] === 0) {
         cell.classList.add("wall");
       } else if (map[i][j] === 1) {
-        if (Math.random() < 0.1) {
+        if (Math.random() < 0.7) {
           cell.classList.add("block");
         } else {
           map[i][j] = 2;
@@ -29,4 +29,3 @@ export function renderMap() {
     }
   }
 }
-
