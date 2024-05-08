@@ -71,3 +71,70 @@ body {
   /* background-color: #f2b228; */
   background-image: url(./assets/wall/wall_destructible.png);
 }
+
+/* MESSAGE BOX */
+
+.chatBox {
+  width: 25%;
+  height: fit-content;
+  border: 1px solid gray;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.avatar {
+  color: #fcfefd;
+}
+
+.chat-title {
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  background-image: url(./assets/wall/wall.png);
+  background-size: contain;
+}
+
+.messages {
+  width: 100%;
+  height: 83%;
+  min-height: 600px;
+  background: #fff;
+}
+.message-input {
+  width: 80%;
+  height: 30px;
+  font-size: 16px;
+  padding: 5px;
+  border: none;
+  border: 1px solid #354a59;
+  outline: none;
+  resize: none;
+  background: white;
+  border-radius: 5px;
+}
+
+.message-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  /* background: #212025; */
+}
+
+
+.message-submit {
+  width: 16%;
+  height: 40px;
+  background-image: url(./assets/wall/wall_destructible.png);
+  background-size: contain;
+  outline: none;
+  font-size: 20px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+}
+.message-submit:hover {
+  background-image: url(./assets/wall/wall.png);
+}

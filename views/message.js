@@ -1,4 +1,7 @@
+import { handleMessage } from "../controllers/message/messageController.js";
 import { MyFrame } from "../framework/miniframe.js";
+import { creaBomb } from "./bomb.js";
+
 
 export function createChatInterface() {
   const chat = MyFrame.createDomElement(
@@ -19,7 +22,25 @@ export function createChatInterface() {
     MyFrame.createDomElement(
       "div",
       { class: "messages" },
-      MyFrame.createDomElement("div", { class: "messages-content" })
+      MyFrame.createDomElement("div",
+        { class: "messages-content" },
+        MyFrame.createDomElement(
+          "div",
+          { class: "message-box-contentSender" },
+
+          MyFrame.createDomElement(
+            "span",
+            { class: "message-box-contentSender" },
+            "Hello gamers"
+          ),
+
+          MyFrame.createDomElement(
+            "span",
+            { class: "message-nameSender" },
+            "gamer 1"
+          ),
+        ),
+      )
     ),
     MyFrame.createDomElement(
       "div",
@@ -31,11 +52,14 @@ export function createChatInterface() {
       }),
       MyFrame.createDomElement(
         "button",
-        { type: "submit", class: "message-submit" },
+        {
+          type: "submit",
+          class: "message-submit",
+          onClick : handleMessage
+        },
         "Send"
       )
     )
   );
-
   return chat;
 }

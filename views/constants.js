@@ -13,6 +13,24 @@ export let mapInit = [
 ];
 export let map = mapInit;
 export let players = [];
+export let startPos = [
+  {
+    x: 1,
+    y: 1,
+  },
+  {
+    x: 15,
+    y: 9,
+  },
+  {
+    x: 15,
+    y: 1,
+  },
+  {
+    x: 1,
+    y: 9,
+  },
+];
 export const CELL_SIZE = 60;
 export const MAP_SIZEX = map.length;
 export const MAP_SIZEY = map[1].length;

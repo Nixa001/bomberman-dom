@@ -49,3 +49,20 @@ export function movePlayer(player, direction) {
     player.element.style.top = player.y * CELL_SIZE + "px";
   }
 }
+
+const BOMB_TIMER = 3000;
+
+function placeBomb(player) {
+  const bomb = document.createElement("div");
+  bomb.classList.add("bomb");
+  bomb.style.left = player.x * CELL_SIZE + "px";
+  bomb.style.top = player.y * CELL_SIZE + "px";
+  document.getElementById("game-container").appendChild(bomb);
+
+  setTimeout(() => explodeBomb(bomb), BOMB_TIMER);
+}
+
+function explodeBomb(bomb) {
+  bomb.classList.add("bombExplosed");
+  setTimeout(() => bomb.remove(), 1100);
+}
