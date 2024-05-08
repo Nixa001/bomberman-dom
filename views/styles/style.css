@@ -24,15 +24,14 @@ body {
   width: 100%;
   display: flex;
   justify-content: space-around;
-  /* padding: 10px; */
-  background-color: #fcfefd; /* Utilise la couleur définie dans index.js */
+  /* padding: 10px; */ /* Utilise la couleur définie dans index.js */
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .time, .life, .players {
   font-size: 18px;
-  color: #29282d; /* Utilise la couleur définie dans index.js */
+  color: #29282d; 
 }
 
 .time {

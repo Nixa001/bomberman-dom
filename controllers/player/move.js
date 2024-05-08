@@ -1,8 +1,8 @@
 import { CELL_SIZE, map, players } from "../../views/constants.js";
 import { placeBomb } from "../bomb/bomb.js";
 
-export function eventHandler(event) {
-  const player = players[0];
+export function eventHandler(event, idPlayer) {
+  const player = players[idPlayer];
   switch (event.key) {
     case "ArrowUp":
       movePlayer(player, "up");
@@ -48,21 +48,4 @@ export function movePlayer(player, direction) {
     player.element.style.left = player.x * CELL_SIZE + "px";
     player.element.style.top = player.y * CELL_SIZE + "px";
   }
-}
-
-const BOMB_TIMER = 3000;
-
-function placeBomb(player) {
-  const bomb = document.createElement("div");
-  bomb.classList.add("bomb");
-  bomb.style.left = player.x * CELL_SIZE + "px";
-  bomb.style.top = player.y * CELL_SIZE + "px";
-  document.getElementById("game-container").appendChild(bomb);
-
-  setTimeout(() => explodeBomb(bomb), BOMB_TIMER);
-}
-
-function explodeBomb(bomb) {
-  bomb.classList.add("bombExplosed");
-  setTimeout(() => bomb.remove(), 1100);
 }

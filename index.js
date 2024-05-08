@@ -10,13 +10,12 @@ import { createChatInterface } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
 
 let player1 = { id: 1, pseudo: "ibg", x: 1, y: 1, live: 3 };
-// let player2Pos = { pseudo: "nixa", x: 13, y: 7 };
+let player2Pos = { pseudo: "nixa", x: 15, y: 9 };
 // let player2Pos = { pseudo: "nixa", x: 15, y: 9 };
 // let player2Pos = { pseudo: "nixa", x: 15, y: 1};
 // let player2Pos = { pseudo: "nixa", x: 1, y: 9};
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("start", startPos[0]);
   let infoGame = gameInfo();
   let messageBox = createChatInterface();
   let title = MyFrame.createDomElement("div", { class: "titleDiv" });
@@ -36,14 +35,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (login) {
         login.remove();
       }
-      MyFrame.appendComponentToNode(title, body);
-      MyFrame.appendComponentToNode(infoGame, body);
+      MyFrame.appendComponentToNode(messageBox, body);
+      
       renderMap();
       players.push(new Player(1, player1Pos.x, player1Pos.y));
-      // players.push(new Player(2, player2Pos.x, player2Pos.y));
-      MyFrame.appendComponentToNode(messageBox, body);
-      updateGame();
+      players.push(new Player(2, player2Pos.x, player2Pos.y));
+      MyFrame.appendComponentToNode(infoGame, body);
+      MyFrame.appendComponentToNode(title, body);
     }
+    updateGame();
   });
 });
 
