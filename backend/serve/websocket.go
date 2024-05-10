@@ -28,10 +28,20 @@ type Message struct {
 }
 type Player struct {
 	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Name string `json:"pseudo"`
+	X    string `json:"x"`
+	Y    string `json:"y"`
 }
 
-// var idplayer = 0
+var players []Player
+
+type Response struct {
+	State    string                 `json:"state"`
+	Players  []Player               `json:"players"`
+	DataResp map[string]interface{} `json:"dataResp"`
+}
+
+var idplayer = 0
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
 	ws, err := upgrader.Upgrade(w, r, nil)
@@ -52,13 +62,19 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println("m", m)
 		if m.Type == "login" {
 			var player Player
-			player.Id = m.Content.Id
+			player.Id = idplayer
 			player.Name = m.Content.Pseudo
-			// idplayer++
-			if err := ws.WriteJSON(player); err != nil {
+			fmt.Println("Player", player)
+			idplayer++
+			dataResp := map[string]interface{}{
+				"id":   player.Id,
+				"name": player.Name,
+			}
+			players = append(players, player)
+			resp := Response{State: "join", Players: players, DataResp: dataResp}
+			if err := ws.WriteJSON(resp); err != nil {
 				break
 			}
 		}

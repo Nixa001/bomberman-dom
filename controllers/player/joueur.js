@@ -2,8 +2,9 @@ import { MyFrame } from "../../framework/miniframe.js";
 import { CELL_SIZE } from "../../views/constants.js";
 
 export class Player {
-  constructor(id, x, y) {
+  constructor(id, pseudo, x, y) {
     this.id = id;
+    this.pseudo = pseudo;
     this.x = x;
     this.y = y;
     this.element = MyFrame.createDomElement("div", {});

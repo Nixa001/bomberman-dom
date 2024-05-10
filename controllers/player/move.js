@@ -1,8 +1,8 @@
 import { CELL_SIZE, map, players } from "../../views/constants.js";
 import { placeBomb } from "../bomb/bomb.js";
 
-export function eventHandler(event, idPlayer) {
-  const player = players[idPlayer];
+export function eventHandler(event, id) {
+  const player = players[id];
   switch (event.key) {
     case "ArrowUp":
       movePlayer(player, "up");
@@ -39,7 +39,7 @@ export function movePlayer(player, direction) {
       newX = player.x + 1;
       break;
     case " ":
-      placeBomb(players[0]);
+      placeBomb(players[player.id]);
       break;
   }
   if (map[newY][newX] !== 0 && map[newY][newX] !== 1) {
