@@ -5,18 +5,26 @@ import { players } from "./views/constants.js";
 import { loginInterface } from "./views/login.js";
 import { createChatInterface } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
+import { Waiting } from "./views/waiting.js";
 
 let player1Pos = { pseudo: "ibg", x: 1, y: 1 };
 // let player2Pos = { pseudo: "nixa", x: 13, y: 7 };
 
+const users = [
+  { name: 'Player1', username: "ibg" },
+  { name: 'Player2', username: "nixa" },
+  { name: 'Player3', username: "dicks" },
+  { name: 'Player4', username: "darze" }
+];
 document.addEventListener("DOMContentLoaded", () => {
   let messageBox = createChatInterface();
   let title = MyFrame.createDomElement("div", { class: "titleDiv" });
   const body = document.querySelector("body");
-
+  let wait = Waiting(users)
   // MyFrame.appendComponentToNode( loginInterface(), body);
   MyFrame.appendComponentToNode(title, body);
-  renderMap();
+  MyFrame.appendComponentToNode(wait, body);
+  // renderMap();
   players.push(new Player(1, player1Pos.x, player1Pos.y));
   MyFrame.appendComponentToNode(messageBox, body);
   updateGame();
