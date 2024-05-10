@@ -32,8 +32,22 @@ document.addEventListener("DOMContentLoaded", () => {
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
     if (data && data.state == "join") {
+      if (data.players.length > 4) {
+        return;
+      }
       let login = document.querySelector(".loginDiv");
-      login.remove();
+      if (login) {
+        login.remove();
+      }
+
+      let waitingDiv = document.querySelector(".waiting");
+      if (waitingDiv) {
+        waitingDiv.remove();
+      }
+
+      MyFrame.appendComponentToNode(Waiting(data.players), body);
+
+      return;
       renderMap();
 
       data.players.forEach((player) => {
@@ -56,11 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     }
-    // console.log("x : y", xP1 + " " + yP1);
-    // MyFrame.appendComponentToNode(messageBox, body);
-    // players.push(new Player(2, player2Pos.x, player2Pos.y));
-    // MyFrame.appendComponentToNode(infoGame, body);
-    // MyFrame.appendComponentToNode(title, body);
     updateGame();
   });
 });

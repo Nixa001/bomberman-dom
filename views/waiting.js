@@ -9,7 +9,10 @@ export const Waiting = (tabUser) => {
     if (play && counter === 0) {
       counter = counter;
     } else {
-      counter--;
+      if (tabUser.length > 1) {
+        counter--;
+      }
+      console.log(tabUser.length);
     }
 
     if (counter < 0) {
@@ -24,7 +27,6 @@ export const Waiting = (tabUser) => {
       waitingElement.textContent = `${wait} ... ${counter}`;
     }
   };
-
   // Appelez updateCounter toutes les secondes
   setInterval(updateCounter, 1000);
 
@@ -35,12 +37,12 @@ export const Waiting = (tabUser) => {
       MyFrame.createDomElement(
         "span",
         { class: "playerWatinmg" },
-        `${user.name}:`
+        `Player ${user.id}:`
       ),
       MyFrame.createDomElement(
         "span",
         { class: "user-name" },
-        `Username: ${user.username}`
+        `Username: ${user.pseudo}`
       )
     )
   );

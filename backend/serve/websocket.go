@@ -12,11 +12,12 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		return true // Permet toutes les origines, mais en production, vous devriez vérifier l'origine.
+		// Permet toutes les origines, mais en production, vous devriez vérifier l'origine.
+		return true
 	},
 }
 
-var Gamers []websocket.Conn
+var Gamers map[int]*websocket.Conn
 
 type MessageStruct struct {
 	Type    string  `json:"type"`
@@ -31,6 +32,7 @@ type Player struct {
 	Name string `json:"pseudo"`
 	X    string `json:"x"`
 	Y    string `json:"y"`
+	Live int    `json:"live"`
 }
 
 var players []Player
@@ -50,6 +52,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer ws.Close()
+
 	for {
 		// Lit un message du client.
 		_, msg, err := ws.ReadMessage()
@@ -62,20 +65,31 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
+
+		if Gamers == nil {
+			Gamers = make(map[int]*websocket.Conn)
+		}
 		if m.Type == "login" {
+
+			Gamers[idplayer] = ws
 			var player Player
 			player.Id = idplayer
 			player.Name = m.Content.Pseudo
-			fmt.Println("Player", player)
 			idplayer++
 			dataResp := map[string]interface{}{
 				"id":   player.Id,
 				"name": player.Name,
 			}
 			players = append(players, player)
+			fmt.Println("Player", players)
+
 			resp := Response{State: "join", Players: players, DataResp: dataResp}
-			if err := ws.WriteJSON(resp); err != nil {
-				break
+			for _, gamer := range Gamers {
+				// if err := gamer.WriteMessage(){}
+				if err := gamer.WriteJSON(resp); err != nil {
+					break
+				}
+
 			}
 		}
 	}
