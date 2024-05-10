@@ -8,6 +8,7 @@ import { gameInfo } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
 import { createChatInterface } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
+import { Waiting } from "./views/waiting.js";
 
 // let player1 = { id: 1, pseudo: "ibg", x: 1, y: 1, live: 3 };
 // let player2Pos = { pseudo: "nixa", x: 15, y: 9 };
@@ -15,6 +16,12 @@ import { renderMap } from "./views/playground.js";
 // let player2Pos = { pseudo: "nixa", x: 15, y: 1};
 // let player2Pos = { pseudo: "nixa", x: 1, y: 9};
 
+const users = [
+  { name: "Player1", username: "ibg" },
+  { name: "Player2", username: "nixa" },
+  { name: "Player3", username: "dicks" },
+  { name: "Player4", username: "darze" },
+];
 document.addEventListener("DOMContentLoaded", () => {
   let infoGame = gameInfo();
   let messageBox = createChatInterface();
@@ -24,8 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
-    console.log("data :", data);
-
     if (data && data.state == "join") {
       let login = document.querySelector(".loginDiv");
       login.remove();
@@ -48,27 +53,14 @@ document.addEventListener("DOMContentLoaded", () => {
           MyFrame.attachEventHandler(document, "keydown", (event) => {
             eventHandler(event, id);
           });
-          // document.addEventListener("keydown", (event) => {
-          //   eventHandler(event, id);
-          // });
         }
       });
-
-      // alert(id);
-      // if (login) {
-      // }
     }
-    // console.log("name :", data.name);
-
-    // if (data.id == 0) {
-    //   console.log("x : y", xP1 + " " + yP1);
-    //   MyFrame.appendComponentToNode(messageBox, body);
-
-    //   players.push(new Player(2, player2Pos.x, player2Pos.y));
-    //   MyFrame.appendComponentToNode(infoGame, body);
-    //   MyFrame.appendComponentToNode(title, body);
-    // }
-
+    // console.log("x : y", xP1 + " " + yP1);
+    // MyFrame.appendComponentToNode(messageBox, body);
+    // players.push(new Player(2, player2Pos.x, player2Pos.y));
+    // MyFrame.appendComponentToNode(infoGame, body);
+    // MyFrame.appendComponentToNode(title, body);
     updateGame();
   });
 });
