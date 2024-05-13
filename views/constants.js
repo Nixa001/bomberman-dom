@@ -11,7 +11,7 @@ export let mapInit = [
   [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 2, 2, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
-export let map = mapInit;
+// export let map = mapInit;
 export let players = [];
 export let startPos = [
   {
@@ -32,8 +32,8 @@ export let startPos = [
   },
 ];
 export const CELL_SIZE = 60;
-export const MAP_SIZEX = map.length;
-export const MAP_SIZEY = map[1].length;
+export const MAP_SIZEX = mapInit.length;
+export const MAP_SIZEY = mapInit[1].length;
 export let color = {
   white: "#fcfefd",
   yellow: "#f2b228",

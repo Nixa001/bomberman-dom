@@ -1,4 +1,5 @@
-import { CELL_SIZE, map, players } from "../../views/constants.js";
+import { map } from "../../index.js";
+import { CELL_SIZE, players } from "../../views/constants.js";
 import { placeBomb } from "../bomb/bomb.js";
 
 export function eventHandler(event, id) {

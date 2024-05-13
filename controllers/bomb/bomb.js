@@ -1,6 +1,7 @@
 import { MyFrame } from "../../framework/miniframe.js";
+import { map } from "../../index.js";
 import { players } from "../../views/constants.js";
-import { CELL_SIZE, map } from "../../views/constants.js";
+import { CELL_SIZE } from "../../views/constants.js";
 
 export const BOMB_TIMER = 3000;
 export let canPlaceBomb = false;

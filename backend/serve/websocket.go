@@ -12,7 +12,6 @@ var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
 	CheckOrigin: func(r *http.Request) bool {
-		// Permet toutes les origines, mais en production, vous devriez vérifier l'origine.
 		return true
 	},
 }
@@ -41,8 +40,12 @@ type Response struct {
 	State    string                 `json:"state"`
 	Players  []Player               `json:"players"`
 	DataResp map[string]interface{} `json:"dataResp"`
+	Map      [][]int                `json:"map"`
 }
 
+// var mapBoard [][]int
+
+var mapBoard = RenderMap()
 var idplayer = 0
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +57,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	defer ws.Close()
 
 	for {
-		// Lit un message du client.
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
 			// Gère l'erreur de lecture.
@@ -83,7 +85,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			players = append(players, player)
 			fmt.Println("Player", players)
 
-			resp := Response{State: "join", Players: players, DataResp: dataResp}
+			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard}
 			for _, gamer := range Gamers {
 				// if err := gamer.WriteMessage(){}
 				if err := gamer.WriteJSON(resp); err != nil {
