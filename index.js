@@ -3,7 +3,7 @@ import { eventHandler } from "./controllers/player/move.js";
 import { readMessageFromServer } from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
-import { players, startPos } from "./views/constants.js";
+import { messages, players, startPos } from "./views/constants.js";
 import { gameInfo } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
 import { createChatInterface } from "./views/message.js";
@@ -28,49 +28,80 @@ document.addEventListener("DOMContentLoaded", () => {
   let title = MyFrame.createDomElement("div", { class: "titleDiv" });
   const body = document.querySelector("body");
   MyFrame.appendComponentToNode(loginInterface(), body);
+  // MyFrame.appendComponentToNode(userInterface(), body);
+
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
     if (data && data.state == "join") {
-      if (data.players.length > 4) {
-        return;
-      }
+      //     if (data.players.length > 4) {
+      //       return;
+      //     }
       let login = document.querySelector(".loginDiv");
       if (login) {
         login.remove();
       }
+      MyFrame.appendComponentToNode(infoGame, body); //
+      MyFrame.appendComponentToNode(title, body);
+      MyFrame.appendComponentToNode(messageBox, body);
 
-      let waitingDiv = document.querySelector(".waiting");
-      if (waitingDiv) {
-        waitingDiv.remove();
-      }
+      //     let waitingDiv = document.querySelector(".waiting");
+      //     if (waitingDiv) {
+      //       waitingDiv.remove();
+      //     }
+      //     MyFrame.appendComponentToNode(Waiting(data.players), body);
 
-      MyFrame.appendComponentToNode(Waiting(data.players), body);
+      //     // return;
+      //     renderMap();
 
-      return;
-      renderMap();
-
-      data.players.forEach((player) => {
-        const id = player.id;
-        let xPlayer = startPos[id].x;
-        let yPlayer = startPos[id].y;
-        let playerPos = {
-          id: id,
-          pseudo: player.pseudo,
-          x: xPlayer,
-          y: yPlayer,
-        };
-        players.push(
-          new Player(playerPos.id, playerPos.pseudo, playerPos.x, playerPos.y)
-        );
-        if (id == data.dataResp.id) {
-          MyFrame.attachEventHandler(document, "keydown", (event) => {
-            eventHandler(event, id);
-          });
-        }
-      });
+      //     data.players.forEach((player) => {
+      //       const id = player.id;
+      //       let xPlayer = startPos[id].x;
+      //       let yPlayer = startPos[id].y;
+      //       let playerPos = {
+      //         id: id,
+      //         pseudo: player.pseudo,
+      //         x: xPlayer,
+      //         y: yPlayer,
+      //       };
+      //       players.push(
+      //         new Player(playerPos.id, playerPos.pseudo, playerPos.x, playerPos.y)
+      //       );
+      //       if (id == data.dataResp.id) {
+      //         MyFrame.attachEventHandler(document, "keydown", (event) => {
+      //           eventHandler(event, id);
+      //         });
+      //       }
+      //     });
     }
-    updateGame();
+    //   updateGame();
+    if (data && data.state == "message") {
+      messages.push(data);
+      let msg = document.querySelector(".messages");
+      let content;
+      for (let i = 0; i < messages.length; i++) {
+        console.log(messages);
+        content = MyFrame.createDomElement("div",
+          { class: "messages-content" },
+          MyFrame.createDomElement(
+            "div",
+            { class: "message-box-content" },
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-box-contentSender" },
+              messages[messages.length - 1].dataResp.message
+            ),
+
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-nameSender" },
+              messages[messages.length - 1].dataResp.sender
+            ),
+          ),
+        )
+      }
+      MyFrame.appendComponentToNode(content, msg);
+    }
   });
 });
 

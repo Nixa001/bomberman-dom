@@ -31,6 +31,7 @@ export let startPos = [
     y: 9,
   },
 ];
+export let messages = [];
 export const CELL_SIZE = 60;
 export const MAP_SIZEX = map.length;
 export const MAP_SIZEY = map[1].length;

@@ -20,13 +20,10 @@ var upgrader = websocket.Upgrader{
 var Gamers map[int]*websocket.Conn
 
 type MessageStruct struct {
-	Type    string  `json:"type"`
-	Content Message `json:"content"`
+	Type    string                 `json:"type"`
+	Content map[string]interface{} `json:"content"`
 }
-type Message struct {
-	Id     int    `json:"id"`
-	Pseudo string `json:"pseudo"`
-}
+
 type Player struct {
 	Id   int    `json:"id"`
 	Name string `json:"pseudo"`
@@ -63,18 +60,18 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		var m MessageStruct
 		err = json.Unmarshal(msg, &m)
 		if err != nil {
-			fmt.Println(err)
+			fmt.Println("something", err)
 		}
 
 		if Gamers == nil {
 			Gamers = make(map[int]*websocket.Conn)
 		}
+		//Traitement du login
 		if m.Type == "login" {
-
 			Gamers[idplayer] = ws
 			var player Player
 			player.Id = idplayer
-			player.Name = m.Content.Pseudo
+			player.Name = m.Content["pseudo"].(string)
 			idplayer++
 			dataResp := map[string]interface{}{
 				"id":   player.Id,
@@ -82,14 +79,28 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			players = append(players, player)
 			fmt.Println("Player", players)
-
 			resp := Response{State: "join", Players: players, DataResp: dataResp}
 			for _, gamer := range Gamers {
 				// if err := gamer.WriteMessage(){}
 				if err := gamer.WriteJSON(resp); err != nil {
-					break
+					return
 				}
-
+			}
+		}
+		//Traitement du message
+		if m.Type == "message" {
+			for _, gamer := range Gamers {
+				response := Response{
+					State:    "message",
+                    DataResp: map[string]interface{}{
+						"sender":  m.Content["sender"].(string),
+						"message": m.Content["message"].(string),
+					},
+				
+				}
+				if err := gamer.WriteJSON(response); err != nil {
+					return
+				}
 			}
 		}
 	}

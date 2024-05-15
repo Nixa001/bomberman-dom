@@ -22,25 +22,25 @@ export function createChatInterface() {
     MyFrame.createDomElement(
       "div",
       { class: "messages" },
-      MyFrame.createDomElement("div",
-        { class: "messages-content" },
-        MyFrame.createDomElement(
-          "div",
-          { class: "message-box-contentSender" },
+      // MyFrame.createDomElement("div",
+      //   { class: "messages-content" },
+      //   MyFrame.createDomElement(
+      //     "div",
+      //     { class: "message-box-content" },
 
-          MyFrame.createDomElement(
-            "span",
-            { class: "message-box-contentSender" },
-            "Hello gamers"
-          ),
+      //     MyFrame.createDomElement(
+      //       "span",
+      //       { class: "message-box-contentSender" },
+      //       "Hello gamers"
+      //     ),
 
-          MyFrame.createDomElement(
-            "span",
-            { class: "message-nameSender" },
-            "gamer 1"
-          ),
-        ),
-      )
+      //     MyFrame.createDomElement(
+      //       "span",
+      //       { class: "message-nameSender" },
+      //       "gamer 1"
+      //     ),
+      //   ),
+      // )
     ),
     MyFrame.createDomElement(
       "div",
