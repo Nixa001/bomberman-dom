@@ -1,6 +1,10 @@
 package server
 
-import "math/rand"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+)
 
 const (
 	CELL_SIZE = 20
@@ -28,12 +32,21 @@ func RenderMap() [][]int {
 		for j := 0; j < len(mapBoard[1]); j++ {
 			if mapBoard[i][j] == 1 {
 				if rand.Float64() < 0.7 {
-					mapBoard[i][j] = 1
+					if rand.Float64() < 0.3 {
+						mapBoard[i][j] = getRandomNumber()
+					} else {
+						mapBoard[i][j] = 1
+					}
 				} else {
 					mapBoard[i][j] = 2
 				}
 			}
 		}
+		fmt.Println(mapBoard[i])
 	}
 	return mapBoard
+}
+func getRandomNumber() int {
+	rand.Seed(time.Now().UnixNano())
+	return rand.Intn(3) + 3
 }

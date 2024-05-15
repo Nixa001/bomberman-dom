@@ -41,6 +41,7 @@ type Response struct {
 	Players  []Player               `json:"players"`
 	DataResp map[string]interface{} `json:"dataResp"`
 	Map      [][]int                `json:"map"`
+	MapBonus [][]int                `json:"mapBonus"`
 }
 
 // var mapBoard [][]int
@@ -85,7 +86,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			players = append(players, player)
 			fmt.Println("Player", players)
 
-			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard}
+			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard}
 			for _, gamer := range Gamers {
 				// if err := gamer.WriteMessage(){}
 				if err := gamer.WriteJSON(resp); err != nil {

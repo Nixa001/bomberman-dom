@@ -1,19 +1,29 @@
 import { MyFrame } from "../../framework/miniframe.js";
-import { map } from "../../index.js";
+import { map, mapBonus } from "../../index.js";
 import { players } from "../../views/constants.js";
 import { CELL_SIZE } from "../../views/constants.js";
+import { BonusDualBomb } from "../player/move.js";
 
 export const BOMB_TIMER = 3000;
-export let canPlaceBomb = false;
+export let anotheBomb = { canPlaceBomb: false };
+export let time = 1100;
 // export let cellToExplode = [];
 let playerLive = 3;
+let counterEvenBomb = 2;
 
 export function placeBomb(player) {
-  if (canPlaceBomb) {
+  if (anotheBomb.canPlaceBomb) {
     return;
   }
 
-  canPlaceBomb = true;
+  if (!BonusDualBomb) {
+    anotheBomb.canPlaceBomb = true;
+  } else {
+    if (counterEvenBomb % 2 == 0) {
+      anotheBomb.canPlaceBomb = true;
+    }
+    counterEvenBomb++;
+  }
   const cellToExplode = [];
 
   cellToExplode.push(createBomb(player.x, player.y));
@@ -28,7 +38,7 @@ export function placeBomb(player) {
   }
   setTimeout(() => {
     explodeBomb(cellToExplode);
-    canPlaceBomb = false;
+    anotheBomb.canPlaceBomb = false;
   }, BOMB_TIMER);
 }
 
@@ -58,7 +68,7 @@ function isValidPosition(x, y) {
   );
 }
 
-function replaceBlock(explosionPosition) {
+export function replaceBlock(explosionPosition) {
   const gameContainer = document.getElementById("game-container");
   const blocks = gameContainer.querySelectorAll(".block");
 
@@ -80,7 +90,22 @@ function replaceBlock(explosionPosition) {
       cell.style.left = block.style.left;
       cell.style.top = block.style.top;
       gameContainer.replaceChild(cell, block);
+      if (map[blockPosition.y][blockPosition.x] == 3) {
+        cell.classList.add("power3");
+        // mapBonus[blockPosition.y][blockPosition.x] = 3;
+      }
+      if (map[blockPosition.y][blockPosition.x] == 4) {
+        cell.classList.add("power4");
+        // mapBonus[blockPosition.y][blockPosition.x] = 4;
+      }
+      if (map[blockPosition.y][blockPosition.x] == 5) {
+        cell.classList.add("power5");
+        // mapBonus[blockPosition.y][blockPosition.x] = 5;
+      }
+      // console.log(map);
       map[blockPosition.y][blockPosition.x] = 2;
+      console.log(map);
+      console.log(mapBonus);
     }
   });
 }
@@ -119,7 +144,7 @@ function explodeBomb(cellToExplode) {
 
   setTimeout(() => {
     clearInterval(intervalId);
-  }, 1100);
+  }, anotheBomb.time);
 
   cellToExplode.forEach((bomb) => {
     document.getElementById("game-container").appendChild(bomb);
@@ -137,5 +162,5 @@ function explodeBomb(cellToExplode) {
     }, 1100);
   });
 
-  canPlaceBomb = false;
+  anotheBomb.canPlaceBomb = false;
 }

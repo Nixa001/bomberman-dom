@@ -21,6 +21,7 @@ let playerSlice;
 let localPlayerId;
 
 export let map;
+export let mapBonus;
 document.addEventListener("DOMContentLoaded", () => {
   // let infoGame = gameInfo();
   // let messageBox = createChatInterface();
@@ -45,13 +46,19 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       map = data.map;
+      mapBonus = data.mapBonus;
+
       MyFrame.appendComponentToNode(Waiting(data.players), waitingDiv);
       if (data.players.length > 1) {
-        startTimer();
+        // startTimer();
       }
       // updateGame();
       playerSlice = data.players;
       if (data.dataResp.id) localPlayerId = data.dataResp.id;
+      console.log("L'action après le timer est lancée!");
+      const gameContainer = document.querySelector(".game-container");
+      gameContainer.style.display = "block";
+      StartGame();
       return;
       console.log(data.map);
       renderMap(map);
@@ -86,13 +93,13 @@ function updateTimer(durationInSeconds) {
       secondTimer = false;
       return;
     }
-    setTimeout(function () {
-      console.log("L'action après le timer est lancée!");
-      const gameContainer = document.querySelector(".game-container");
-      gameContainer.style.display = "block";
-      StartGame();
-      // return;
-    }, 2000);
+    // setTimeout(function () {
+    //   console.log("L'action après le timer est lancée!");
+    //   const gameContainer = document.querySelector(".game-container");
+    //   gameContainer.style.display = "block";
+    //   StartGame();
+    //   // return;
+    // }, 2000);
   } else {
     timerInterval = requestAnimationFrame(
       updateTimer.bind(null, durationInSeconds)
@@ -127,9 +134,9 @@ function StartGame() {
     );
     console.log(id, playerSlice[index].id);
     MyFrame.attachEventHandler(document, "keydown", (event) => {
-      if (id == localPlayerId) {
-        eventHandler(event, localPlayerId);
-      }
+      // if (id == localPlayerId) {
+      eventHandler(event, id);
+      // }
     });
     console.log(players);
     // index = index + 1;
