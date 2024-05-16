@@ -3,8 +3,7 @@ import { eventHandler } from "./controllers/player/move.js";
 import { readMessageFromServer } from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
-import { players, startPos } from "./views/constants.js";
-// import { gameInfo } from "./views/gameInfo/gameInfo.js";
+import {  players, startPos } from "./views/constants.js";
 import { loginInterface } from "./views/login.js";
 import { createChatInterface, messageBox, messageContent } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
@@ -26,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const body = document.querySelector("body");
   MyFrame.appendComponentToNode(loginInterface(), body);
+  // MyFrame.appendComponentToNode(userInterface(), body);
+
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
@@ -37,6 +38,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (login) {
         login.remove();
       }
+      MyFrame.appendComponentToNode(infoGame, body); //
+      MyFrame.appendComponentToNode(title, body);
+      MyFrame.appendComponentToNode(messageBox, body);
 
       let waitingDiv = document.querySelector(".waiting");
       if (waitingDiv) {

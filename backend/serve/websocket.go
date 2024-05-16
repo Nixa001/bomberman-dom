@@ -25,14 +25,10 @@ var (
 )
 
 type MessageStruct struct {
-	Type    string  `json:"type"`
-	Content Message `json:"content"`
+	Type    string                 `json:"type"`
+	Content map[string]interface{} `json:"content"`
 }
-type Message struct {
-	Id     int    `json:"id"`
-	Pseudo string `json:"pseudo"`
-	Time   int    `json:"time"`
-}
+
 type Player struct {
 	Id   int    `json:"id"`
 	Name string `json:"pseudo"`
@@ -73,21 +69,23 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		var m MessageStruct
 		err = json.Unmarshal(msg, &m)
 		if err != nil {
-			fmt.Println(err)
-			continue
+			fmt.Println("something", err)
 		}
 
-		switch m.Type {
-		case "login":
-			// Gérer le login du joueur
-			player := Player{Id: idplayer, Name: m.Content.Pseudo}
-			players = append(players, player)
+		if Gamers == nil {
+			Gamers = make(map[int]*websocket.Conn)
+		}
+		//Traitement du login
+		var player Player
+		player.Id = idplayer
+		player.Name = m.Content["pseudo"].(string)
+		dataResp := map[string]interface{}{
+			"id":   player.Id,
+			"name": player.Name,
+		}
+		if m.Type == "login" {
 			Gamers[idplayer] = ws
 			idplayer++
-			dataResp := map[string]interface{}{
-				"id":   player.Id,
-				"name": player.Name,
-			}
 			fmt.Println("map = ", mapBoard)
 			mapBoard = RenderMap()
 			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, Id: player.Id, Time: seconds}
@@ -95,6 +93,31 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		if len(Gamers) == 2 {
 			startTimer(Gamers)
+			players = append(players, player)
+			fmt.Println("Player", players)
+			resp := Response{State: "join", Players: players, DataResp: dataResp}
+			for _, gamer := range Gamers {
+				// if err := gamer.WriteMessage(){}
+				if err := gamer.WriteJSON(resp); err != nil {
+					return
+				}
+			}
+		}
+		//Traitement du message
+		if m.Type == "message" {
+			for _, gamer := range Gamers {
+				response := Response{
+					State:    "message",
+                    DataResp: map[string]interface{}{
+						"sender":  m.Content["sender"].(string),
+						"message": m.Content["message"].(string),
+					},
+				
+				}
+				if err := gamer.WriteJSON(response); err != nil {
+					return
+				}
+			}
 		}
 	}
 	
