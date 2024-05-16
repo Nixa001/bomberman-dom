@@ -6,7 +6,7 @@ import { MyFrame } from "./framework/miniframe.js";
 import { players, startPos } from "./views/constants.js";
 // import { gameInfo } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
-// import { createChatInterface } from "./views/message.js";
+import { createChatInterface, messageBox, messageContent } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
 import { Waiting } from "./views/waiting.js";
 
@@ -23,7 +23,7 @@ let localPlayerId;
 export let map;
 document.addEventListener("DOMContentLoaded", () => {
   // let infoGame = gameInfo();
-  // let messageBox = createChatInterface();
+
   const body = document.querySelector("body");
   MyFrame.appendComponentToNode(loginInterface(), body);
   let data;
@@ -88,8 +88,7 @@ function updateTimer(durationInSeconds) {
     }
     setTimeout(function () {
       console.log("L'action après le timer est lancée!");
-      const gameContainer = document.querySelector(".game-container");
-      gameContainer.style.display = "block";
+
       StartGame();
       // return;
     }, 2000);
@@ -102,18 +101,30 @@ function updateTimer(durationInSeconds) {
 
 let index = 0;
 function StartGame() {
-  const waitingDiv = document.querySelector(".waiting");
+  const chatTitle = createChatInterface();
   const title = document.querySelector(".title");
+  const message = messageContent();
+  const chat = document.querySelector(".chatBox")
+  const messagebox = messageBox();
+  const gameContainer = document.querySelector(".game-container");
+  const waitingDiv = document.querySelector(".waiting");
+  MyFrame.appendComponentToNode(chatTitle, chat)
+  MyFrame.appendComponentToNode(message, chat)
+  MyFrame.appendComponentToNode(messagebox, chat)
+  if (chat) {
+    chat.style.display = "block";
+  }
   if (title) {
     title.style.display = "block";
   }
+  gameContainer.style.display = "block";
   if (waitingDiv) {
     waitingDiv.remove();
   }
   renderMap(map);
   console.log(playerSlice);
   playerSlice.forEach((player) => {
-    const id = player.id;
+    let id = player.id;
     let xPlayer = startPos[id].x;
     let yPlayer = startPos[id].y;
     let playerPos = {

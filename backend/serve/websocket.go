@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/websocket"
 )
@@ -78,7 +77,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		fmt.Println("iiiiiiiiii", m.Type)
 		switch m.Type {
 		case "login":
 			// Gérer le login du joueur
@@ -94,21 +92,12 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			mapBoard = RenderMap()
 			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, Id: player.Id, Time: seconds}
 			broadcast(resp, Gamers)
-			// case "time":
-			// 	go startTimer()
-			// 	// Gérer le temps
-			// 	resp := ResponseTime{State: "time", Time: seconds}
-			// 	fmt.Println("Temps dans reponse ", seconds)
-			// 	if err := ws.WriteJSON(resp); err != nil {
-			// 		// Gérer l'erreur d'écriture et nettoyer la connexion
-			// 		// delete(Gamers, idplayer)
-			// 		return
-			// 	}
 		}
 		if len(Gamers) == 2 {
 			startTimer(Gamers)
 		}
 	}
+	
 }
 
 func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
@@ -124,54 +113,45 @@ func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
 }
 
 func startTimer(gamers map[int]*websocket.Conn) {
+	// No need to create a ticker if you're not using it to receive values
+	// ticker := time.NewTicker(time.Second)
+	// defer ticker.Stop()
 
-	// Créez un canal pour recevoir des signaux chaque seconde
-	ticker := time.NewTicker(time.Second)
-	defer ticker.Stop()
-
-	// Compteur pour suivre le nombre de secondes écoulées
-
+	// Directly decrement seconds in each iteration
 	for {
 		if seconds == 0 {
-			// seconds = 0
 			break
 		}
-		select {
-		case <-ticker.C:
-			seconds--
-			fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
-			fmt.Println("-----------------------------", len(gamers))
-			resp := ResponseTime{State: "time", Time: seconds}
-			broadcast(resp, gamers)
+		seconds--
 
-		}
+		fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
+		fmt.Println("-----------------------------", len(gamers))
+		resp := ResponseTime{State: "time", Time: seconds}
+		broadcast(resp, gamers)
 	}
 }
 
-// func startTimer() {
-//     ticker := time.NewTicker(time.Second)
-//     defer ticker.Stop()
+// func startTimer(gamers map[int]*websocket.Conn) {
 
-//     for {
+// 	// Créez un canal pour recevoir des signaux chaque seconde
+// 	ticker := time.NewTicker(time.Second)
+// 	defer ticker.Stop()
+
+// 	// Compteur pour suivre le nombre de secondes écoulées
+
+// 	for {
 // 		if seconds == 0 {
+// 			// seconds = 0
 // 			break
 // 		}
-//         select {
-//         case <-ticker.C:
-//             seconds-- // Assurez-vous que ceci est correct selon votre logique de décompte
-//             fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
+// 		select {
+// 		case <-ticker.C:
+// 			seconds--
+// 			fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
+// 			fmt.Println("-----------------------------", len(gamers))
+// 			resp := ResponseTime{State: "time", Time: seconds}
+// 			broadcast(resp, gamers)
 
-//             // Envoyez le temps restant à tous les clients
-//             resp := ResponseTime{State: "time", Time: seconds}
-//             broadcast(resp)
-//         }
-//     }
-// }
-
-// func sendRemainingTime() {
-//     // Créez un objet contenant le temps restant
-//     resp := ResponseTime{State: "time", Time: seconds}
-
-//     // Utilisez la fonction broadcast pour envoyer le message à tous les clients
-//     broadcast(resp)
+// 		}
+// 	}
 // }
