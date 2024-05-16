@@ -32,7 +32,7 @@ func RenderMap() [][]int {
 		for j := 0; j < len(mapBoard[1]); j++ {
 			if mapBoard[i][j] == 1 {
 				if rand.Float64() < 0.7 {
-					if rand.Float64() < 0.3 {
+					if rand.Float64() < 1 {
 						mapBoard[i][j] = getRandomNumber()
 					} else {
 						mapBoard[i][j] = 1

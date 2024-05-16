@@ -3,7 +3,10 @@ import { map, mapBonus } from "../../index.js";
 import { CELL_SIZE, players } from "../../views/constants.js";
 import { anotheBomb, placeBomb } from "../bomb/bomb.js";
 let firstSpeed = true;
+let expireTimeSpeed = false;
 export let BonusDualBomb = false;
+let keydownHandler;
+
 export function eventHandler(event, id) {
   const player = players[id];
   switch (event.key) {
@@ -52,10 +55,17 @@ export function movePlayer(player, direction) {
     player.element.style.top = player.y * CELL_SIZE + "px";
     if (mapBonus[newY][newX] == 4) {
       if (firstSpeed) {
-        MyFrame.attachEventHandler(document, "keydown", (event) => {
+        const keydownHandler = (event) => {
           eventHandler(event, player.id);
-          firstSpeed = false;
-        });
+        };
+
+        document.addEventListener("keydown", keydownHandler);
+        setTimeout(() => {
+          document.removeEventListener("keydown", keydownHandler);
+          firstSpeed = true;
+        }, 5000);
+
+        firstSpeed = false;
       }
     }
     if (mapBonus[newY][newX] == 3) {
@@ -64,6 +74,7 @@ export function movePlayer(player, direction) {
     if (mapBonus[newY][newX] == 5) {
       player.live++;
     }
+
 
     // Calculer la position de la cellule dans le DOM
     const cellPosition = {
