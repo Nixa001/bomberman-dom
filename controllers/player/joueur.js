@@ -7,6 +7,7 @@ export class Player {
     this.pseudo = pseudo;
     this.x = x;
     this.y = y;
+    this.live = 3;
     this.element = MyFrame.createDomElement("div", {});
     this.element.classList.add("player");
     this.element.style.left = this.x * CELL_SIZE + "px";

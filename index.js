@@ -25,6 +25,7 @@ let playerSlice;
 let localPlayerId;
 
 export let map;
+export let mapBonus;
 document.addEventListener("DOMContentLoaded", () => {
   // let infoGame = gameInfo();
   // let messageBox = createChatInterface();
@@ -60,6 +61,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       map = data.map;
+      mapBonus = data.mapBonus;
+
       MyFrame.appendComponentToNode(Waiting(data.players), waitingDiv);
 
       // updateGame();

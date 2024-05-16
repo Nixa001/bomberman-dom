@@ -56,6 +56,7 @@ type Response struct {
 	Id       int                    `json:"id"`
 	Name     string                 `json:"pseudo"`
 	Time     int                    `json:"time"`
+	MapBonus [][]int                `json:"mapBonus"`
 }
 
 type ResponseTime struct {
@@ -99,7 +100,9 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Println("map = ", mapBoard)
 			mapBoard = RenderMap()
-			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, Id: player.Id, Name: player.Name, Time: seconds}
+			// resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard}
+
+			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard, Id: player.Id, Name: player.Name, Time: seconds}
 			broadcast(resp, Gamers)
 
 			if len(Gamers) == 2 {
