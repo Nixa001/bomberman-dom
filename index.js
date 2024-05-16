@@ -6,10 +6,9 @@ import {
 } from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
-import { players, startPos } from "./views/constants.js";
-// import { gameInfo } from "./views/gameInfo/gameInfo.js";
+import {  players, startPos } from "./views/constants.js";
 import { loginInterface } from "./views/login.js";
-// import { createChatInterface } from "./views/message.js";
+import { createChatInterface, messageBox, messageContent } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
 import { Waiting } from "./views/waiting.js";
 
@@ -28,9 +27,11 @@ export let map;
 export let mapBonus;
 document.addEventListener("DOMContentLoaded", () => {
   // let infoGame = gameInfo();
-  // let messageBox = createChatInterface();
+
   const body = document.querySelector("body");
   MyFrame.appendComponentToNode(loginInterface(), body);
+  // MyFrame.appendComponentToNode(userInterface(), body);
+
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
@@ -85,8 +86,33 @@ document.addEventListener("DOMContentLoaded", () => {
         StartGame();
       }
     }
-    // if (data.players.length > 1) {
-    // }
+    if (data && data.state == "message") {
+      // messages.push(data);
+      let msg = document.querySelector(".messages");
+      let content;
+      // for (let i = 0; i < messages.length; i++) {
+        // console.log(messages);
+        content = MyFrame.createDomElement("div",
+          { class: "messages-content" },
+          MyFrame.createDomElement(
+            "div",
+            { class: "message-box-content" },
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-box-contentSender" },
+              data.dataResp.message
+            ),
+
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-nameSender" },
+              data.dataResp.sender
+            ),
+          ),
+        )
+      // }
+      MyFrame.appendComponentToNode(content, msg);
+    }
   });
 });
 
@@ -138,18 +164,33 @@ initializeWebSocket();
 
 let index = 0;
 function StartGame() {
-  const waitingDiv = document.querySelector(".waiting");
+  const chatTitle = createChatInterface();
   const title = document.querySelector(".title");
-  if (title) {
-    title.style.display = "block";
+  const message = messageContent();
+  const chat = document.querySelector(".chatBox")
+  const gameContainer = document.querySelector(".game-container");
+  const waitingDiv = document.querySelector(".waiting");
+  if (index === 0) {
+    const messagebox = messageBox();
+    MyFrame.appendComponentToNode(chatTitle, chat)
+    MyFrame.appendComponentToNode(message, chat)
+    MyFrame.appendComponentToNode(messagebox, chat)
+    if (chat) {
+      chat.style.display = "block";
+    }
+    index++
   }
+    if (title) {
+      title.style.display = "block";
+  }
+  gameContainer.style.display = "block";
   if (waitingDiv) {
     waitingDiv.remove();
   }
   renderMap(map);
   console.log(playerSlice);
   playerSlice.forEach((player) => {
-    const id = player.id;
+    let id = player.id;
     let xPlayer = startPos[id].x;
     let yPlayer = startPos[id].y;
     let playerPos = {

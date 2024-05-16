@@ -125,6 +125,20 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			broadcast(resp, Gamers)
 			fmt.Println(resp)
 
+		case "message":
+			for _, gamer := range Gamers {
+				response := Response{
+					State: "message",
+					DataResp: map[string]interface{}{
+						"sender":  m.Content["sender"].(string),
+						"message": m.Content["message"].(string),
+					},
+				}
+				if err := gamer.WriteJSON(response); err != nil {
+					return
+				}
+			}
+
 		}
 	}
 }
