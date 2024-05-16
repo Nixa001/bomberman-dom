@@ -9,7 +9,11 @@ import { MyFrame } from "./framework/miniframe.js";
 import { players, startPos } from "./views/constants.js";
 import { gameLife, gamePlayers, gameTime } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
-import { createChatInterface, messageBox, messageContent } from "./views/message.js";
+import {
+  createChatInterface,
+  messageBox,
+  messageContent,
+} from "./views/message.js";
 import { renderMap } from "./views/playground.js";
 import { Waiting } from "./views/waiting.js";
 
@@ -93,7 +97,8 @@ document.addEventListener("DOMContentLoaded", () => {
       let content;
       // for (let i = 0; i < messages.length; i++) {
       // console.log(messages);
-      content = MyFrame.createDomElement("div",
+      content = MyFrame.createDomElement(
+        "div",
         { class: "messages-content" },
         MyFrame.createDomElement(
           "div",
@@ -108,9 +113,9 @@ document.addEventListener("DOMContentLoaded", () => {
             "span",
             { class: "message-nameSender" },
             data.dataResp.sender
-          ),
-        ),
-      )
+          )
+        )
+      );
       // }
       MyFrame.appendComponentToNode(content, msg);
     }
@@ -173,24 +178,24 @@ function StartGame() {
   const title = document.querySelector(".title");
   const gameInfo = document.querySelector(".game-info");
   const message = messageContent();
-  const chat = document.querySelector(".chatBox")
+  const chat = document.querySelector(".chatBox");
   const gameContainer = document.querySelector(".game-container");
   const waitingDiv = document.querySelector(".waiting");
   if (index === 0) {
     const messagebox = messageBox();
-    MyFrame.appendComponentToNode(chatTitle, chat)
-    MyFrame.appendComponentToNode(message, chat)
-    MyFrame.appendComponentToNode(messagebox, chat)
+    MyFrame.appendComponentToNode(chatTitle, chat);
+    MyFrame.appendComponentToNode(message, chat);
+    MyFrame.appendComponentToNode(messagebox, chat);
     if (chat) {
       chat.style.display = "block";
     }
-    index++
+    index++;
   }
   if (title) {
     title.style.display = "block";
   }
-  MyFrame.appendComponentToNode(play, gameInfo)
-  MyFrame.appendComponentToNode(life, gameInfo)
+  MyFrame.appendComponentToNode(play, gameInfo);
+  MyFrame.appendComponentToNode(life, gameInfo);
   // MyFrame.appendComponentToNode(time, gameInfo)
   gameContainer.style.display = "block";
   if (gameInfo) {
@@ -210,14 +215,18 @@ function StartGame() {
       pseudo: player.pseudo,
       x: xPlayer,
       y: yPlayer,
+      live: 3,
     };
     players.push(
       new Player(playerPos.id, playerPos.pseudo, playerPos.x, playerPos.y)
     );
     // console.log(id, playerSlice[index].id);
+    let playersLength = document.querySelector(".players");
+    playersLength.textContent = "Players: " + players.length;
     console.log(players);
     // index = index + 1;
   });
+
   MyFrame.attachEventHandler(document, "keyup", (event) => {
     // if (id == localPlayerId) {
     console.log("-----------------------------------------");

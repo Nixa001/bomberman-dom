@@ -1,5 +1,5 @@
 import { MyFrame } from "../../framework/miniframe.js";
-import { map, mapBonus } from "../../index.js";
+import { getDataFromLocalStorage, map, mapBonus } from "../../index.js";
 import { players } from "../../views/constants.js";
 import { CELL_SIZE } from "../../views/constants.js";
 import { BonusDualBomb } from "../player/move.js";
@@ -8,7 +8,7 @@ export const BOMB_TIMER = 3000;
 export let anotheBomb = { canPlaceBomb: false };
 export let time = 1100;
 // export let cellToExplode = [];
-let playerLive = 3;
+export let playerLive = 3;
 let counterEvenBomb = 2;
 
 export function placeBomb(player) {
@@ -25,8 +25,6 @@ export function placeBomb(player) {
     counterEvenBomb++;
   }
   const cellToExplode = [];
-  let life = document.querySelector(".life");
-  life.textContent = "life: " + playerLive
 
   cellToExplode.push(createBomb(player.x, player.y));
 
@@ -117,10 +115,8 @@ function calculateDistance(x1, y1, x2, y2) {
 }
 
 function explodeBomb(cellToExplode) {
-
   let isInitBomb = true;
   let isFirstTimeExplosed = true;
-
   const intervalId = setInterval(() => {
     players.forEach((player) => {
       cellToExplode.forEach((bomb) => {
@@ -128,13 +124,18 @@ function explodeBomb(cellToExplode) {
           x: parseInt(bomb.style.left) / CELL_SIZE,
           y: parseInt(bomb.style.top) / CELL_SIZE,
         };
+        let userData = getDataFromLocalStorage();
         if (
           player.x === bombPosition.x &&
           player.y === bombPosition.y &&
-          isFirstTimeExplosed
+          isFirstTimeExplosed &&
+          userData.id == player.id
         ) {
-          console.log("Explose");
+          // players
           playerLive--;
+          let life = document.querySelector(".life");
+          life.innerHTML = "life: " + playerLive;
+          console.log("Explose");
           if (playerLive == 0) {
             alert("Vous avez perdu");
           }
@@ -144,11 +145,9 @@ function explodeBomb(cellToExplode) {
       });
     });
   }, 200);
-
   setTimeout(() => {
     clearInterval(intervalId);
-  }, anotheBomb.time);
-
+  }, 1100);
   cellToExplode.forEach((bomb) => {
     document.getElementById("game-container").appendChild(bomb);
     bomb.classList.add("bombExploded");
@@ -164,6 +163,5 @@ function explodeBomb(cellToExplode) {
       }
     }, 1100);
   });
-
   anotheBomb.canPlaceBomb = false;
 }
