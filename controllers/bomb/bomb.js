@@ -6,7 +6,8 @@ import { CELL_SIZE } from "../../views/constants.js";
 export const BOMB_TIMER = 3000;
 export let canPlaceBomb = false;
 // export let cellToExplode = [];
-let playerLive = 3;
+export let playerLive = 3;
+
 
 export function placeBomb(player) {
   if (canPlaceBomb) {
@@ -15,6 +16,8 @@ export function placeBomb(player) {
 
   canPlaceBomb = true;
   const cellToExplode = [];
+  let life = document.querySelector(".life");
+  life.textContent = "life: " + playerLive
 
   cellToExplode.push(createBomb(player.x, player.y));
 
@@ -90,6 +93,7 @@ function calculateDistance(x1, y1, x2, y2) {
 }
 
 function explodeBomb(cellToExplode) {
+
   let isInitBomb = true;
   let isFirstTimeExplosed = true;
 

@@ -3,7 +3,8 @@ import { eventHandler } from "./controllers/player/move.js";
 import { readMessageFromServer } from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
-import {  players, startPos } from "./views/constants.js";
+import { players, startPos } from "./views/constants.js";
+import { gameLife, gamePlayers, gameTime } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
 import { createChatInterface, messageBox, messageContent } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
@@ -62,25 +63,25 @@ document.addEventListener("DOMContentLoaded", () => {
       let msg = document.querySelector(".messages");
       let content;
       // for (let i = 0; i < messages.length; i++) {
-        // console.log(messages);
-        content = MyFrame.createDomElement("div",
-          { class: "messages-content" },
+      // console.log(messages);
+      content = MyFrame.createDomElement("div",
+        { class: "messages-content" },
+        MyFrame.createDomElement(
+          "div",
+          { class: "message-box-content" },
           MyFrame.createDomElement(
-            "div",
-            { class: "message-box-content" },
-            MyFrame.createDomElement(
-              "span",
-              { class: "message-box-contentSender" },
-              data.dataResp.message
-            ),
-
-            MyFrame.createDomElement(
-              "span",
-              { class: "message-nameSender" },
-              data.dataResp.sender
-            ),
+            "span",
+            { class: "message-box-contentSender" },
+            data.dataResp.message
           ),
-        )
+
+          MyFrame.createDomElement(
+            "span",
+            { class: "message-nameSender" },
+            data.dataResp.sender
+          ),
+        ),
+      )
       // }
       MyFrame.appendComponentToNode(content, msg);
     }
@@ -130,7 +131,12 @@ function updateTimer(durationInSeconds) {
 let index = 0;
 function StartGame() {
   const chatTitle = createChatInterface();
+  // const time = gameTime();
+  const life = gameLife();
+  const play = gamePlayers();
+
   const title = document.querySelector(".title");
+  const gameInfo = document.querySelector(".game-info");
   const message = messageContent();
   const chat = document.querySelector(".chatBox")
   const gameContainer = document.querySelector(".game-container");
@@ -145,10 +151,16 @@ function StartGame() {
     }
     index++
   }
-    if (title) {
-      title.style.display = "block";
+  if (title) {
+    title.style.display = "block";
   }
+  MyFrame.appendComponentToNode(play, gameInfo)
+  MyFrame.appendComponentToNode(life, gameInfo)
+  // MyFrame.appendComponentToNode(time, gameInfo)
   gameContainer.style.display = "block";
+  if (gameInfo) {
+    gameInfo.style.display = "block";
+  }
   if (waitingDiv) {
     waitingDiv.remove();
   }
