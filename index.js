@@ -13,7 +13,7 @@ var startTime;
 var elapsedTime = 0;
 var timerInterval;
 var secondTimer = true;
-let durationInSeconds = 3;
+let durationInSeconds = 15;
 let lastTimer = 2;
 let playerSlice;
 // let DataRespID = [];
@@ -38,9 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (login) {
         login.remove();
       }
-      MyFrame.appendComponentToNode(infoGame, body); //
-      MyFrame.appendComponentToNode(title, body);
-      MyFrame.appendComponentToNode(messageBox, body);
 
       let waitingDiv = document.querySelector(".waiting");
       if (waitingDiv) {
@@ -59,6 +56,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
       console.log(data.map);
       renderMap(map);
+    }
+    if (data && data.state == "message") {
+      // messages.push(data);
+      let msg = document.querySelector(".messages");
+      let content;
+      // for (let i = 0; i < messages.length; i++) {
+        // console.log(messages);
+        content = MyFrame.createDomElement("div",
+          { class: "messages-content" },
+          MyFrame.createDomElement(
+            "div",
+            { class: "message-box-content" },
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-box-contentSender" },
+              data.dataResp.message
+            ),
+
+            MyFrame.createDomElement(
+              "span",
+              { class: "message-nameSender" },
+              data.dataResp.sender
+            ),
+          ),
+        )
+      // }
+      MyFrame.appendComponentToNode(content, msg);
     }
   });
 });
@@ -109,17 +133,20 @@ function StartGame() {
   const title = document.querySelector(".title");
   const message = messageContent();
   const chat = document.querySelector(".chatBox")
-  const messagebox = messageBox();
   const gameContainer = document.querySelector(".game-container");
   const waitingDiv = document.querySelector(".waiting");
-  MyFrame.appendComponentToNode(chatTitle, chat)
-  MyFrame.appendComponentToNode(message, chat)
-  MyFrame.appendComponentToNode(messagebox, chat)
-  if (chat) {
-    chat.style.display = "block";
+  if (index === 0) {
+    const messagebox = messageBox();
+    MyFrame.appendComponentToNode(chatTitle, chat)
+    MyFrame.appendComponentToNode(message, chat)
+    MyFrame.appendComponentToNode(messagebox, chat)
+    if (chat) {
+      chat.style.display = "block";
+    }
+    index++
   }
-  if (title) {
-    title.style.display = "block";
+    if (title) {
+      title.style.display = "block";
   }
   gameContainer.style.display = "block";
   if (waitingDiv) {
@@ -140,7 +167,6 @@ function StartGame() {
     players.push(
       new Player(playerPos.id, playerPos.pseudo, playerPos.x, playerPos.y)
     );
-    console.log(id, playerSlice[index].id);
     MyFrame.attachEventHandler(document, "keydown", (event) => {
       if (id == localPlayerId) {
         eventHandler(event, localPlayerId);

@@ -76,15 +76,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			Gamers = make(map[int]*websocket.Conn)
 		}
 		//Traitement du login
-		var player Player
-		player.Id = idplayer
-		player.Name = m.Content["pseudo"].(string)
-		dataResp := map[string]interface{}{
-			"id":   player.Id,
-			"name": player.Name,
-		}
 		if m.Type == "login" {
 			Gamers[idplayer] = ws
+			var player Player
+			player.Id = idplayer
+			player.Name = m.Content["pseudo"].(string)
+			dataResp := map[string]interface{}{
+				"id":   player.Id,
+				"name": player.Name,
+			}
+			players = append(players, player)
 			idplayer++
 			fmt.Println("map = ", mapBoard)
 			mapBoard = RenderMap()
@@ -93,26 +94,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 		if len(Gamers) == 2 {
 			startTimer(Gamers)
-			players = append(players, player)
-			fmt.Println("Player", players)
-			resp := Response{State: "join", Players: players, DataResp: dataResp}
-			for _, gamer := range Gamers {
-				// if err := gamer.WriteMessage(){}
-				if err := gamer.WriteJSON(resp); err != nil {
-					return
-				}
-			}
 		}
 		//Traitement du message
 		if m.Type == "message" {
 			for _, gamer := range Gamers {
 				response := Response{
-					State:    "message",
-                    DataResp: map[string]interface{}{
+					State: "message",
+					DataResp: map[string]interface{}{
 						"sender":  m.Content["sender"].(string),
 						"message": m.Content["message"].(string),
 					},
-				
 				}
 				if err := gamer.WriteJSON(response); err != nil {
 					return
@@ -120,7 +111,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	
+
 }
 
 func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
