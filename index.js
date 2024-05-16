@@ -1,6 +1,9 @@
 import { Player } from "./controllers/player/joueur.js";
 import { eventHandler } from "./controllers/player/move.js";
-import { readMessageFromServer } from "./controllers/socket/utils.js";
+import {
+  readMessageFromServer,
+  sendMessageToServer,
+} from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
 import { players, startPos } from "./views/constants.js";
@@ -14,7 +17,7 @@ var startTime;
 var elapsedTime = 0;
 var timerInterval;
 var secondTimer = true;
-let durationInSeconds = 3;
+let durationInSeconds;
 let lastTimer = 2;
 let playerSlice;
 // let DataRespID = [];
@@ -29,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
+    // console.log("data.state === ", data.time);
     if (data && data.state == "join") {
       if (data.players.length > 2 && !secondTimer) {
         return;
@@ -47,25 +51,37 @@ document.addEventListener("DOMContentLoaded", () => {
       map = data.map;
       MyFrame.appendComponentToNode(Waiting(data.players), waitingDiv);
       if (data.players.length > 1) {
-        startTimer();
+        setTimeout(() => {
+          startTimer();
+        }, 2000);
       }
       // updateGame();
       playerSlice = data.players;
       if (data.dataResp.id) localPlayerId = data.dataResp.id;
+      console.log("Hello wold ", data);
+      // renderMap(map)
       return;
-      console.log(data.map);
-      renderMap(map);
+    } else if (data && data.state == "time") {
+      console.log("Temps actuel :", data.time);
+      durationInSeconds = data.time; // Assurez-vous que ceci correspond à la structure de vos données
     }
+    // if (data.players.length > 1) {
+    // }
   });
 });
 
 initializeWebSocket();
+// setInterval(() => {
+//   sendMessageToServer({ type: "time", content: { data: "data" } });
+// }, 1000);
 
 function startTimer() {
-  startTime = Date.now();
-  timerInterval = requestAnimationFrame(
-    updateTimer.bind(null, durationInSeconds)
-  );
+  if (durationInSeconds) {
+    startTime = Date.now();
+    timerInterval = requestAnimationFrame(
+      updateTimer.bind(null, durationInSeconds)
+    );
+  }
 }
 function startTimer2() {
   startTime = Date.now();
