@@ -22,12 +22,18 @@ var (
 	players  []Player
 	mapBoard [][]int
 	idplayer = 0
-	seconds  = 20
+	seconds  = 2
 )
 
 type MessageStruct struct {
-	Type    string  `json:"type"`
-	Content Message `json:"content"`
+	Type    string                 `json:"type"`
+	Content map[string]interface{} `json:"content"`
+}
+type RespMove struct {
+	State string `json:"state"`
+	Id    int    `json:"id"`
+	Name  string `json:"pseudo"`
+	Key   string `json:"key"`
 }
 type Message struct {
 	Id     int    `json:"id"`
@@ -48,12 +54,14 @@ type Response struct {
 	DataResp map[string]interface{} `json:"dataResp"`
 	Map      [][]int                `json:"map"`
 	Id       int                    `json:"id"`
+	Name     string                 `json:"pseudo"`
 	Time     int                    `json:"time"`
 }
 
 type ResponseTime struct {
-	State string `json:"state"`
-	Time  int    `json:"time"`
+	State    string `json:"state"`
+	Time     int    `json:"time"`
+	CanStart bool   `json:"start"`
 }
 
 func handleConnections(w http.ResponseWriter, r *http.Request) {
@@ -78,11 +86,10 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
-		fmt.Println("iiiiiiiiii", m.Type)
 		switch m.Type {
 		case "login":
 			// Gérer le login du joueur
-			player := Player{Id: idplayer, Name: m.Content.Pseudo}
+			player := Player{Id: idplayer, Name: m.Content["pseudo"].(string)}
 			players = append(players, player)
 			Gamers[idplayer] = ws
 			idplayer++
@@ -92,8 +99,12 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			fmt.Println("map = ", mapBoard)
 			mapBoard = RenderMap()
-			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, Id: player.Id, Time: seconds}
+			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, Id: player.Id, Name: player.Name, Time: seconds}
 			broadcast(resp, Gamers)
+
+			if len(Gamers) == 2 {
+				startTimer(Gamers)
+			}
 			// case "time":
 			// 	go startTimer()
 			// 	// Gérer le temps
@@ -104,27 +115,31 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			// 		// delete(Gamers, idplayer)
 			// 		return
 			// 	}
-		}
-		if len(Gamers) == 2 {
-			startTimer(Gamers)
+		case "move":
+			fmt.Println("iiiiiiiiii", m.Type)
+			fmt.Println(m.Content["pseudo"])
+			resp := RespMove{State: "move", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Key: m.Content["key"].(string)}
+			broadcast(resp, Gamers)
+			fmt.Println(resp)
+
 		}
 	}
 }
 
 func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
 	for _, gamer := range gamers {
-
 		if err := gamer.WriteJSON(resp); err != nil {
 			// Gérer l'erreur d'écriture et nettoyer les connexions
 			// delete(Gamers, idplayer)
 			return
 		}
-
 	}
 }
 
-func startTimer(gamers map[int]*websocket.Conn) {
+var firstTime bool = true
 
+func startTimer(gamers map[int]*websocket.Conn) {
+	var CanStart = false
 	// Créez un canal pour recevoir des signaux chaque seconde
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
@@ -133,15 +148,22 @@ func startTimer(gamers map[int]*websocket.Conn) {
 
 	for {
 		if seconds == 0 {
-			// seconds = 0
-			break
+			if firstTime {
+				seconds = 1
+				firstTime = false
+			} else {
+				CanStart = true
+				resp := ResponseTime{State: "time", Time: seconds, CanStart: CanStart}
+				broadcast(resp, gamers)
+				break
+			}
 		}
 		select {
 		case <-ticker.C:
 			seconds--
 			fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
 			fmt.Println("-----------------------------", len(gamers))
-			resp := ResponseTime{State: "time", Time: seconds}
+			resp := ResponseTime{State: "time", Time: seconds, CanStart: CanStart}
 			broadcast(resp, gamers)
 
 		}
