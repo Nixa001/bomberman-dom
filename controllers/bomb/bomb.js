@@ -25,6 +25,8 @@ export function placeBomb(player) {
     counterEvenBomb++;
   }
   const cellToExplode = [];
+  let life = document.querySelector(".life");
+  life.textContent = "life: " + playerLive
 
   cellToExplode.push(createBomb(player.x, player.y));
 
@@ -115,6 +117,7 @@ function calculateDistance(x1, y1, x2, y2) {
 }
 
 function explodeBomb(cellToExplode) {
+
   let isInitBomb = true;
   let isFirstTimeExplosed = true;
 

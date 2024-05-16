@@ -1,40 +1,34 @@
+import { playerLive } from "../../controllers/bomb/bomb.js";
 import { MyFrame } from "../../framework/miniframe.js";
-
-export let t = 10
-let s = 3
-let p = 4
-
-export function gameInfo(){
+1
+export function gameTime(){
     let time = MyFrame.createDomElement(
         "span",
         {
             class: "time",
-
+            
         },
-        "time : " + t + " s"
-    );
+        "time : 5 seconds" 
+    )
+    return time
+}
+export function gameLife(){
     let life = MyFrame.createDomElement(
         "span",
         {
             class: "life",
         },
-        "life : " + s + " life"
+        "life : " + playerLive
     );
+    return life
+}
+export function gamePlayers(){
     let players = MyFrame.createDomElement(
         "span",
         {
             class: "players",
         },
-        "players : " + p + " players"
+        "players : 4"
     );
-    let gameInfo = MyFrame.createDomElement(
-        "div",
-        {
-            class: "game-info",
-        },
-        time,
-        life,
-        players,
-    );
-    return gameInfo;
+    return players
 }
