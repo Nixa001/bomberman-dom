@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -18,12 +19,18 @@ var upgrader = websocket.Upgrader{
 }
 
 var (
-	Gamers   = make(map[int]*websocket.Conn)
+	Gamers   = make(map[int]*Client)
 	players  []Player
 	mapBoard [][]int
 	idplayer = 0
-	seconds  = 20
+	seconds  = 1
 )
+
+type Client struct {
+	conn *websocket.Conn
+	send chan interface{}
+	mu   sync.Mutex
+}
 
 type MessageStruct struct {
 	Type    string                 `json:"type"`
@@ -72,7 +79,13 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Impossible de mettre à niveau la connexion", http.StatusInternalServerError)
 		return
 	}
+	client := &Client{
+		conn: ws,
+		send: make(chan interface{}),
+	}
 	defer ws.Close()
+
+	go client.writePump()
 
 	for {
 		_, msg, err := ws.ReadMessage()
@@ -94,7 +107,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			player := Player{Id: idplayer, Name: m.Content["pseudo"].(string)}
 			players = append(players, player)
-			Gamers[idplayer] = ws
+			Gamers[idplayer] = client
 			idplayer++
 			dataResp := map[string]interface{}{
 				"id":   player.Id,
@@ -102,10 +115,10 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			}
 			mapBoard = RenderMap()
 			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard, Id: player.Id, Name: player.Name, Time: seconds}
-			broadcast(resp, Gamers)
+			broadcast(resp)
 
 			if len(Gamers) == 2 {
-				startTimer(Gamers)
+				startTimer()
 			}
 			seconds += 1
 			if len(Gamers) == 4 {
@@ -115,7 +128,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 		case "move":
 			resp := RespMove{State: "move", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Key: m.Content["key"].(string)}
-			broadcast(resp, Gamers)
+			broadcast(resp)
 		case "dead":
 			var resp RespMove
 			for id, _ := range Gamers {
@@ -127,7 +140,7 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			if len(Gamers) == 1 {
 				resp = RespMove{State: "dead", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Text: "Win"}
 			}
-			broadcast(resp, Gamers)
+			broadcast(resp)
 
 		case "message":
 			for _, gamer := range Gamers {
@@ -138,26 +151,42 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 						"message": m.Content["message"].(string),
 					},
 				}
-				if err := gamer.WriteJSON(response); err != nil {
-					return
-				}
+				gamer.send <- response
 			}
-
 		}
 	}
 }
 
-func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
-	for _, gamer := range gamers {
-		if err := gamer.WriteJSON(resp); err != nil {
-			return
+func (c *Client) writePump() {
+	for {
+		select {
+		case message, ok := <-c.send:
+			c.mu.Lock()
+			if !ok {
+				c.conn.WriteMessage(websocket.CloseMessage, []byte{})
+				c.mu.Unlock()
+				return
+			}
+			err := c.conn.WriteJSON(message)
+			c.mu.Unlock()
+			if err != nil {
+				return
+			}
 		}
 	}
 }
+
+func broadcast(resp interface{}) {
+	for _, gamer := range Gamers {
+		gamer.send <- resp
+	}
+}
+
+
 
 var firstTime bool = true
 
-func startTimer(gamers map[int]*websocket.Conn) {
+func startTimer() {
 	var CanStart = false
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
@@ -165,12 +194,12 @@ func startTimer(gamers map[int]*websocket.Conn) {
 	for {
 		if seconds == 0 {
 			if firstTime {
-				seconds = 11
+				seconds = 3
 				firstTime = false
 			} else {
 				CanStart = true
 				resp := ResponseTime{State: "time", Time: seconds, CanStart: CanStart}
-				broadcast(resp, gamers)
+				broadcast(resp)
 				break
 			}
 		}
@@ -178,7 +207,7 @@ func startTimer(gamers map[int]*websocket.Conn) {
 		case <-ticker.C:
 			seconds--
 			resp := ResponseTime{State: "time", Time: seconds, CanStart: CanStart}
-			broadcast(resp, gamers)
+			broadcast(resp)
 
 		}
 	}
