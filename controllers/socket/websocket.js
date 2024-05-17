@@ -6,16 +6,8 @@ export function initializeWebSocket() {
 
    socket.addEventListener('open', (event) => {
       console.log('Connexion établie avec le serveur');
-      // Utilisation de la fonction sendMessage
-      // sendMessageToServer({
-      //    type: 'login',
-      //    content: 'toto'
-      // });
    });
 
-   // readMessageFromServer((event) => {
-   //    console.log('Message reçu du serveur:', event.data);
-   // });
 
    socket.addEventListener('error', (event) => {
       console.error('Erreur de connexion:', event);
@@ -25,4 +17,3 @@ export function initializeWebSocket() {
       console.log('Connexion fermée:', event.code, event.reason);
    });
 }
-// initializeWebSocket();

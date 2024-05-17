@@ -16,18 +16,6 @@ export function renderMap(map) {
       } else if (map[i][j] !== 0 && map[i][j] !== 2) {
         cell.classList.add("block");
       }
-      // if (map[i][j] === 3) {
-      //   cell.classList.add("power");
-      //   cell.classList.add("power" + 3);
-      // }
-      // if (map[i][j] === 4) {
-      //   cell.classList.add("power");
-      //   cell.classList.add("power" + 4);
-      // }
-      // if (map[i][j] === 5) {
-      //   cell.classList.add("power");
-      //   cell.classList.add("power" + 5);
-      // }
       MyFrame.appendComponentToNode(cell, gameContainer);
     }
   }

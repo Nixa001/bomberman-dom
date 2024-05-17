@@ -19,4 +19,7 @@ export class Player {
     let gameContainer = document.querySelector("#game-container");
     MyFrame.appendComponentToNode(this.element, gameContainer);
   }
+  removeGamer = () => {
+    this.element.remove();
+  };
 }

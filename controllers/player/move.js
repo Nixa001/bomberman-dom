@@ -11,26 +11,10 @@ let firstSpeed = true;
 let expireTimeSpeed = false;
 export let BonusDualBomb = false;
 
-let keydownHandler;
+// let keydownHandler;
 export function eventHandler(event, id) {
   const player = players[id];
-  // switch (event.key) {
-  //   case "ArrowUp":
-  //     movePlayer(player, "up");
-  //     break;
-  //   case "ArrowDown":
-  //     movePlayer(player, "down");
-  //     break;
-  //   case "ArrowLeft":
-  //     movePlayer(player, "left");
-  //     break;
-  //   case "ArrowRight":
-  //     movePlayer(player, "right");
-  //     break;
-  //   case " ":
-  //     placeBomb(player);
-  //     break;
-  // }
+
   let userData = getDataFromLocalStorage();
 
   let value = {
@@ -40,8 +24,6 @@ export function eventHandler(event, id) {
     bonusDualBomb: BonusDualBomb,
     anotheBomb: anotheBomb.canPlaceBomb,
   };
-  // if (event.key == " ") sendMessageToServer({ type: "move", content: value });
-  // else
   sendMessageToServer({ type: "move", content: value });
 }
 
@@ -56,7 +38,6 @@ export function movePlayer(player, direction) {
       newY = player.y + 1;
       break;
     case "ArrowLeft":
-      // alert("LEft");
       newX = player.x - 1;
       break;
     case "ArrowRight":
@@ -99,15 +80,12 @@ export function movePlayer(player, direction) {
         life.innerHTML = "life: " + player.live;
       }
 
-      // playerLive++;
     }
 
-    // Calculer la position de la cellule dans le DOM
     const cellPosition = {
       left: newX * CELL_SIZE + "px",
       top: newY * CELL_SIZE + "px",
     };
-    // Trouver la cellule actuelle dans le DOM
     const cells = document.querySelectorAll(".cell");
     let targetCell;
     cells.forEach((cell) => {
@@ -120,7 +98,6 @@ export function movePlayer(player, direction) {
     });
 
     if (targetCell) {
-      // créez une nouvelle cellule et remplacez l'ancienne
       const newCell = document.createElement("div");
       newCell.classList.add("cell", "new-class");
       newCell.style.left = cellPosition.left;
