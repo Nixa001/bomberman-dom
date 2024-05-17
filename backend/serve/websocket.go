@@ -22,7 +22,7 @@ var (
 	players  []Player
 	mapBoard [][]int
 	idplayer = 0
-	seconds  = 2
+	seconds  = 1
 )
 
 type MessageStruct struct {
@@ -84,12 +84,16 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		err = json.Unmarshal(msg, &m)
 		if err != nil {
 			fmt.Println(err)
-			continue
+			return
 		}
 
 		switch m.Type {
 		case "login":
 			// Gérer le login du joueur
+			if !firstTime {
+				fmt.Println("Cannot join")
+				return
+			}
 			player := Player{Id: idplayer, Name: m.Content["pseudo"].(string)}
 			players = append(players, player)
 			Gamers[idplayer] = ws
@@ -98,7 +102,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				"id":   player.Id,
 				"name": player.Name,
 			}
-			fmt.Println("map = ", mapBoard)
 			mapBoard = RenderMap()
 			// resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard}
 
@@ -107,6 +110,11 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 
 			if len(Gamers) == 2 {
 				startTimer(Gamers)
+			}
+			seconds += 1
+			if len(Gamers) == 4 {
+				seconds = 10
+				firstTime = false
 			}
 			// case "time":
 			// 	go startTimer()
@@ -119,11 +127,14 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 			// 		return
 			// 	}
 		case "move":
-			fmt.Println("iiiiiiiiii", m.Type)
-			fmt.Println(m.Content["pseudo"])
 			resp := RespMove{State: "move", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Key: m.Content["key"].(string)}
 			broadcast(resp, Gamers)
+			// fmt.Println(resp)
+
+		case "dead":
+			resp := RespMove{State: "dead", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string)}
 			fmt.Println(resp)
+			broadcast(resp, Gamers)
 
 		case "message":
 			for _, gamer := range Gamers {
@@ -166,7 +177,7 @@ func startTimer(gamers map[int]*websocket.Conn) {
 	for {
 		if seconds == 0 {
 			if firstTime {
-				seconds = 1
+				seconds = 10
 				firstTime = false
 			} else {
 				CanStart = true

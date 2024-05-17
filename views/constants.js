@@ -12,7 +12,6 @@ export let mapInit = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 // export let map = mapInit;
-export let players = [];
 export let startPos = [
   {
     x: 1,

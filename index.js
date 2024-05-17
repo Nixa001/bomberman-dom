@@ -1,3 +1,4 @@
+import { placeBombOther } from "./controllers/bomb/bomb.js";
 import { Player } from "./controllers/player/joueur.js";
 import { eventHandler, movePlayer } from "./controllers/player/move.js";
 import {
@@ -6,7 +7,7 @@ import {
 } from "./controllers/socket/utils.js";
 import { initializeWebSocket } from "./controllers/socket/websocket.js";
 import { MyFrame } from "./framework/miniframe.js";
-import { players, startPos } from "./views/constants.js";
+import { startPos } from "./views/constants.js";
 import { gameLife, gamePlayers, gameTime } from "./views/gameInfo/gameInfo.js";
 import { loginInterface } from "./views/login.js";
 import {
@@ -16,6 +17,7 @@ import {
 } from "./views/message.js";
 import { renderMap } from "./views/playground.js";
 import { Waiting } from "./views/waiting.js";
+export let players = [];
 
 let dataStore = { id: 0, pseudo: "" };
 var startTime;
@@ -32,6 +34,7 @@ export let map;
 export let mapBonus;
 document.addEventListener("DOMContentLoaded", () => {
   // let infoGame = gameInfo();
+  localStorage.clear();
 
   const body = document.querySelector("body");
   MyFrame.appendComponentToNode(loginInterface(), body);
@@ -43,7 +46,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // console.log("data.state === ", data.time);
     if (data && data.state == "move") {
       console.log(data);
+      // if (data.key == " ") {
+      //   placeBombOther(players[data.id], data.bonusBomb, data.anotherBomb);
+      // }
       movePlayer(players[data.id], data.key);
+    }
+    if (data && data.state == "dead") {
+      players = players.filter((player) => player.id !== data.id);
+
+      let playersLength = document.querySelector(".players");
+      playersLength.textContent = "Players: " + players.length + " ";
+      // if (players.length == 1) {
+      //   let userData = getDataFromLocalStorage();
+      //   if (userData.id == data.id) {
+      //     alert("You win");
+      //   } else {
+      //     alert("Vous avez perdu");
+      //   }
+      // }
     }
     if (data && data.state == "join") {
       // if (data.players.length > 2 && !secondTimer) {
@@ -222,7 +242,7 @@ function StartGame() {
     );
     // console.log(id, playerSlice[index].id);
     let playersLength = document.querySelector(".players");
-    playersLength.textContent = "Players: " + players.length;
+    playersLength.textContent = "Players: " + players.length + " ";
     console.log(players);
     // index = index + 1;
   });

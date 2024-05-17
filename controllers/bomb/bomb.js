@@ -1,29 +1,40 @@
 import { MyFrame } from "../../framework/miniframe.js";
-import { getDataFromLocalStorage, map, mapBonus } from "../../index.js";
-import { players } from "../../views/constants.js";
+import {
+  getDataFromLocalStorage,
+  map,
+  mapBonus,
+  players,
+} from "../../index.js";
 import { CELL_SIZE } from "../../views/constants.js";
 import { BonusDualBomb } from "../player/move.js";
+import { sendMessageToServer } from "../socket/utils.js";
 
 export const BOMB_TIMER = 3000;
-export let anotheBomb = { canPlaceBomb: false };
+export let anotheBomb = { canPlaceBomb: true };
 export let time = 1100;
 // export let cellToExplode = [];
 export let playerLive = 3;
 let counterEvenBomb = 2;
 
 export function placeBomb(player) {
-  if (anotheBomb.canPlaceBomb) {
+  if (anotheBomb.canPlaceBomb == false) {
+    setTimeout(() => {
+      anotheBomb.canPlaceBomb = true;
+    }, 3000);
     return;
   }
 
-  if (!BonusDualBomb) {
-    anotheBomb.canPlaceBomb = true;
-  } else {
-    if (counterEvenBomb % 2 == 0) {
-      anotheBomb.canPlaceBomb = true;
-    }
-    counterEvenBomb++;
-  }
+  // if (!BonusDualBomb) {
+  //   anotheBomb.canPlaceBomb = true;
+  setTimeout(() => {
+    anotheBomb.canPlaceBomb = false;
+  }, 3000);
+  // } else {
+  //   if (counterEvenBomb % 5 == 0) {
+  //     anotheBomb.canPlaceBomb = true;
+  //   }
+  // }
+  // counterEvenBomb++;
   const cellToExplode = [];
 
   cellToExplode.push(createBomb(player.x, player.y));
@@ -42,6 +53,39 @@ export function placeBomb(player) {
   }, BOMB_TIMER);
 }
 
+export function placeBombOther(player, bonus, anotherBomb) {
+  if (anotherBomb) {
+    return;
+  }
+
+  if (!bonus) {
+    anotherBomb = true;
+    setTimeout(() => {
+      anotherBomb = true;
+    }, 5000);
+  }
+  // else {
+  //   if (counterEvenBomb % 5 == 0) {
+  //     anotheBomb.canPlaceBomb = true;
+  //   }
+  // }
+  const cellToExplode = [];
+
+  cellToExplode.push(createBomb(player.x, player.y));
+
+  for (let index = 1; index <= 4; index++) {
+    let xPos = player.x + (index === 1 ? 1 : index === 2 ? -1 : 0);
+    let yPos = player.y + (index === 3 ? 1 : index === 4 ? -1 : 0);
+
+    if (isValidPosition(xPos, yPos)) {
+      cellToExplode.push(createBomb(xPos, yPos, false));
+    }
+  }
+  setTimeout(() => {
+    explodeBomb(cellToExplode);
+    anotheBomb.canPlaceBomb = false;
+  }, BOMB_TIMER);
+}
 function createBomb(x, y, initial = true) {
   const bomb = document.createElement("div");
   bomb.classList.add("bomb");
@@ -132,12 +176,17 @@ function explodeBomb(cellToExplode) {
           userData.id == player.id
         ) {
           // players
-          playerLive--;
+          player.live--;
           let life = document.querySelector(".life");
-          life.innerHTML = "life: " + playerLive;
+          life.innerHTML = "life: " + player.live;
           console.log("Explose");
-          if (playerLive == 0) {
-            alert("Vous avez perdu");
+          if (player.live == 0) {
+            let userData = getDataFromLocalStorage();
+            let value = {
+              id: userData.id,
+              pseudo: userData.pseudo,
+            };
+            sendMessageToServer({ type: "dead", content: value });
           }
           isFirstTimeExplosed = false;
           return;

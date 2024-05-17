@@ -1,6 +1,11 @@
-import { getDataFromLocalStorage, map, mapBonus } from "../../index.js";
-import { CELL_SIZE, players } from "../../views/constants.js";
-import { placeBomb } from "../bomb/bomb.js";
+import {
+  getDataFromLocalStorage,
+  map,
+  mapBonus,
+  players,
+} from "../../index.js";
+import { CELL_SIZE } from "../../views/constants.js";
+import { anotheBomb, placeBomb, playerLive } from "../bomb/bomb.js";
 import { sendMessageToServer } from "../socket/utils.js";
 let firstSpeed = true;
 let expireTimeSpeed = false;
@@ -27,8 +32,16 @@ export function eventHandler(event, id) {
   // }
   let userData = getDataFromLocalStorage();
 
-  let value = { id: userData.id, pseudo: userData.pseudo, key: event.key };
-  sendMessageToServer({ type: "move", content: value });
+  let value = {
+    id: userData.id,
+    pseudo: userData.pseudo,
+    key: event.key,
+    bonusDualBomb: BonusDualBomb,
+    anotheBomb: anotheBomb.canPlaceBomb,
+  };
+  // if (event.key == " ") sendMessageToServer({ type: "move", content: value });
+  // else
+    sendMessageToServer({ type: "move", content: value });
 }
 
 export function movePlayer(player, direction) {
@@ -76,7 +89,14 @@ export function movePlayer(player, direction) {
       BonusDualBomb = true;
     }
     if (mapBonus[newY][newX] == 5) {
-      player.live++;
+      let userData = getDataFromLocalStorage();
+      if (userData.id == player.id) {
+        player.live++;
+        let life = document.querySelector(".life");
+        life.innerHTML = "life: " + player.live;
+      }
+
+      // playerLive++;
     }
 
     // Calculer la position de la cellule dans le DOM
