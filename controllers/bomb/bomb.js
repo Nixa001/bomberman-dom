@@ -117,8 +117,10 @@ function explodeBomb(cellToExplode) {
           if (player.live === 0) {
             let lose = document.querySelector(".lose");
             lose.style.display = "block";
-            lose.innerHTML = player.pseudo + " your are dead!!!";
+            lose.innerHTML = player.pseudo + " you are dead!!!";
             player.removeGamer();
+            document.querySelector(".game-container").style.display = "none";
+            document.querySelector(".chatBox").style.display = "none";
             let userData = getDataFromLocalStorage();
             let value = {
               id: userData.id,

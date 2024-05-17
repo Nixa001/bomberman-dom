@@ -39,22 +39,28 @@ document.addEventListener("DOMContentLoaded", () => {
   let data;
   readMessageFromServer((event) => {
     data = JSON.parse(event.data);
-    if (data && data.state == "move") {
-      movePlayer(players[data.id], data.key);
-    }
-    let a = 0
+
+    const player = players.find(player => player.id === data.id);
     if (data && data.state == "dead") {
-      players[data.id].removeGamer();
+      player.removeGamer();
       players = players.filter((player) => player.id !== data.id);
       if (players.length === 1) {
         let lose = document.querySelector(".lose");
         lose.style.display = "block";
-        lose.innerHTML = " your Win!!!";
+        lose.innerHTML = "You Win!!!";
+        document.querySelector(".game-container").style.display = "none";
+        document.querySelector(".chatBox").style.display = "none";
+        player.removeGamer()
       }
       let playersLength = document.querySelector(".players");
       playersLength.textContent = "Players: " + players.length + " ";
-    }
-    if (data && data.state == "join") {
+    } else if (data && data.state == "move") {
+      if (player) {
+        movePlayer(player, data.key);
+      } else {
+        console.error(`Joueur avec ID ${data.id} introuvable.`);
+      }
+    } else if (data && data.state == "join") {
       let userData = getDataFromLocalStorage();
       if (userData == null) {
         dataStore.id = data.id;
@@ -87,8 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.time == 0 && data.start == true) {
         const gameContainer = document.querySelector(".game-container");
         gameContainer.style.display = "block";
-        console.log(players) 
-          initialGame();     
+        initialGame();
       }
     }
     if (data && data.state == "message") {

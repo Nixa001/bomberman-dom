@@ -24,10 +24,15 @@ export function eventHandler(event, id) {
     bonusDualBomb: BonusDualBomb,
     anotheBomb: anotheBomb.canPlaceBomb,
   };
+  console.log("--Values--", value);
   sendMessageToServer({ type: "move", content: value });
 }
 
 export function movePlayer(player, direction) {
+  if (!player) {
+    console.error('Le joueur est indéfini.');
+    return;
+  }
   let newX = player.x;
   let newY = player.y;
   switch (direction) {
@@ -48,7 +53,7 @@ export function movePlayer(player, direction) {
       if (document.activeElement === messageInput) {
         return;
       }
-      placeBomb(players[player.id]);
+      placeBomb(player);
       break;
       break;
   }
