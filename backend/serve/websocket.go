@@ -137,7 +137,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 					resp = RespMove{State: "dead", Id: id, Name: m.Content["pseudo"].(string), Text: "Your Lose"}
 				}
 			}
-			fmt.Println("Gamers = ", Gamers)
 			if len(Gamers) == 1 {
 				resp = RespMove{State: "dead", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Text: "Win"}
 			}
