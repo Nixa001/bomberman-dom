@@ -10,6 +10,7 @@ import { sendMessageToServer } from "../socket/utils.js";
 let firstSpeed = true;
 let expireTimeSpeed = false;
 export let BonusDualBomb = false;
+
 let keydownHandler;
 export function eventHandler(event, id) {
   const player = players[id];
@@ -41,7 +42,7 @@ export function eventHandler(event, id) {
   };
   // if (event.key == " ") sendMessageToServer({ type: "move", content: value });
   // else
-    sendMessageToServer({ type: "move", content: value });
+  sendMessageToServer({ type: "move", content: value });
 }
 
 export function movePlayer(player, direction) {
@@ -86,8 +87,10 @@ export function movePlayer(player, direction) {
       }
     }
     if (mapBonus[newY][newX] == 3) {
-      BonusDualBomb = true;
+      player.canPlaceTwoBombs = true;
+      player.limitBomb++;
     }
+
     if (mapBonus[newY][newX] == 5) {
       let userData = getDataFromLocalStorage();
       if (userData.id == player.id) {

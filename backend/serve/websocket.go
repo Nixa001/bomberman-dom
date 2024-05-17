@@ -177,7 +177,7 @@ func startTimer(gamers map[int]*websocket.Conn) {
 	for {
 		if seconds == 0 {
 			if firstTime {
-				seconds = 10
+				seconds = 1
 				firstTime = false
 			} else {
 				CanStart = true

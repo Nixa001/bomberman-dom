@@ -1,4 +1,3 @@
-import { placeBombOther } from "./controllers/bomb/bomb.js";
 import { Player } from "./controllers/player/joueur.js";
 import { eventHandler, movePlayer } from "./controllers/player/move.js";
 import {
@@ -45,10 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
     data = JSON.parse(event.data);
     // console.log("data.state === ", data.time);
     if (data && data.state == "move") {
-      console.log(data);
-      // if (data.key == " ") {
-      //   placeBombOther(players[data.id], data.bonusBomb, data.anotherBomb);
-      // }
       movePlayer(players[data.id], data.key);
     }
     if (data && data.state == "dead") {
@@ -56,14 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let playersLength = document.querySelector(".players");
       playersLength.textContent = "Players: " + players.length + " ";
-      // if (players.length == 1) {
-      //   let userData = getDataFromLocalStorage();
-      //   if (userData.id == data.id) {
-      //     alert("You win");
-      //   } else {
-      //     alert("Vous avez perdu");
-      //   }
-      // }
+
     }
     if (data && data.state == "join") {
       // if (data.players.length > 2 && !secondTimer) {
@@ -94,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
       // updateGame();
       playerSlice = data.players;
       if (data.id) localPlayerId = data.id;
-      console.log("Hello wold ", data);
       // renderMap(map)
       return;
     } else if (data && data.state == "time") {

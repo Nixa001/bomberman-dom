@@ -8,6 +8,10 @@ export class Player {
     this.x = x;
     this.y = y;
     this.live = 3;
+    this.canPlaceBomb = true;
+    this.bombCount = 0;
+    this.canPlaceTwoBombs = false;
+    this.limitBomb = 1;
     this.element = MyFrame.createDomElement("div", {});
     this.element.classList.add("player");
     this.element.style.left = this.x * CELL_SIZE + "px";

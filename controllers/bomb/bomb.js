@@ -6,38 +6,26 @@ import {
   players,
 } from "../../index.js";
 import { CELL_SIZE } from "../../views/constants.js";
-import { BonusDualBomb } from "../player/move.js";
 import { sendMessageToServer } from "../socket/utils.js";
 
 export const BOMB_TIMER = 3000;
-export let anotheBomb = { canPlaceBomb: true };
+export let anotheBomb = { canPlaceBomb: false };
 export let time = 1100;
 // export let cellToExplode = [];
 export let playerLive = 3;
-let counterEvenBomb = 2;
 
 export function placeBomb(player) {
-  if (anotheBomb.canPlaceBomb == false) {
-    setTimeout(() => {
-      anotheBomb.canPlaceBomb = true;
-    }, 3000);
+  if (
+    (!player.canPlaceBomb && !player.canPlaceTwoBombs) ||
+    player.bombCount >= player.limitBomb
+  ) {
     return;
   }
-
-  // if (!BonusDualBomb) {
-  //   anotheBomb.canPlaceBomb = true;
-  setTimeout(() => {
-    anotheBomb.canPlaceBomb = false;
-  }, 3000);
-  // } else {
-  //   if (counterEvenBomb % 5 == 0) {
-  //     anotheBomb.canPlaceBomb = true;
-  //   }
-  // }
-  // counterEvenBomb++;
+  player.bombCount++;
   const cellToExplode = [];
-
   cellToExplode.push(createBomb(player.x, player.y));
+
+  player.canPlaceBomb = false;
 
   for (let index = 1; index <= 4; index++) {
     let xPos = player.x + (index === 1 ? 1 : index === 2 ? -1 : 0);
@@ -47,45 +35,14 @@ export function placeBomb(player) {
       cellToExplode.push(createBomb(xPos, yPos, false));
     }
   }
+
   setTimeout(() => {
+    player.canPlaceBomb = true;
     explodeBomb(cellToExplode);
-    anotheBomb.canPlaceBomb = false;
+    player.bombCount--;
   }, BOMB_TIMER);
 }
 
-export function placeBombOther(player, bonus, anotherBomb) {
-  if (anotherBomb) {
-    return;
-  }
-
-  if (!bonus) {
-    anotherBomb = true;
-    setTimeout(() => {
-      anotherBomb = true;
-    }, 5000);
-  }
-  // else {
-  //   if (counterEvenBomb % 5 == 0) {
-  //     anotheBomb.canPlaceBomb = true;
-  //   }
-  // }
-  const cellToExplode = [];
-
-  cellToExplode.push(createBomb(player.x, player.y));
-
-  for (let index = 1; index <= 4; index++) {
-    let xPos = player.x + (index === 1 ? 1 : index === 2 ? -1 : 0);
-    let yPos = player.y + (index === 3 ? 1 : index === 4 ? -1 : 0);
-
-    if (isValidPosition(xPos, yPos)) {
-      cellToExplode.push(createBomb(xPos, yPos, false));
-    }
-  }
-  setTimeout(() => {
-    explodeBomb(cellToExplode);
-    anotheBomb.canPlaceBomb = false;
-  }, BOMB_TIMER);
-}
 function createBomb(x, y, initial = true) {
   const bomb = document.createElement("div");
   bomb.classList.add("bomb");
