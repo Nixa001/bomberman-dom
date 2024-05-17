@@ -44,7 +44,12 @@ export function movePlayer(player, direction) {
       newX = player.x + 1;
       break;
     case " ":
+      const messageInput = document.querySelector(".message-input");
+      if (document.activeElement === messageInput) {
+        return;
+      }
       placeBomb(players[player.id]);
+      break;
       break;
   }
   if (map[newY][newX] == 2) {

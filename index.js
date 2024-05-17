@@ -179,6 +179,10 @@ function StartGame() {
 
   MyFrame.attachEventHandler(document, "keyup", (event) => {
     let userData = getDataFromLocalStorage();
+    const messageInput = document.querySelector(".message-input");
+    if (document.activeElement === messageInput) {
+      return;
+    }
     eventHandler(event, userData.id);
   });
 }
