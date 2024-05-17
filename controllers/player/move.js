@@ -54,13 +54,13 @@ export function movePlayer(player, direction) {
     player.element.style.top = player.y * CELL_SIZE + "px";
     if (mapBonus[newY][newX] == 4) {
       if (firstSpeed) {
-        const keydownHandler = (event) => {
+        const keyup = (event) => {
           eventHandler(event, player.id);
         };
 
-        document.addEventListener("keydown", keydownHandler);
+        document.addEventListener("keydown", keyup);
         setTimeout(() => {
-          document.removeEventListener("keydown", keydownHandler);
+          document.removeEventListener("keydown", keyup);
           firstSpeed = true;
         }, 5000);
 

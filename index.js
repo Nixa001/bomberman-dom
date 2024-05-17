@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (data && data.state == "move") {
       movePlayer(players[data.id], data.key);
     }
+    let a = 0
     if (data && data.state == "dead") {
       players[data.id].removeGamer();
       players = players.filter((player) => player.id !== data.id);
@@ -86,7 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (data.time == 0 && data.start == true) {
         const gameContainer = document.querySelector(".game-container");
         gameContainer.style.display = "block";
-        StartGame();
+        console.log(players) 
+          initialGame();     
       }
     }
     if (data && data.state == "message") {
@@ -117,6 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 initializeWebSocket();
+
+function initialGame() {
+  requestAnimationFrame(StartGame);
+}
 
 let index = 0;
 function StartGame() {
@@ -184,5 +190,5 @@ export function getDataFromLocalStorage() {
   if (storedData) {
     return JSON.parse(storedData);
   }
-  return null; 
+  return null;
 }
