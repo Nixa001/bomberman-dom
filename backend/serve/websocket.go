@@ -23,7 +23,7 @@ var (
 	players  []Player
 	mapBoard [][]int
 	idplayer = 0
-	seconds  = 10
+	seconds  = 20
 )
 
 type Client struct {
@@ -195,7 +195,7 @@ func startTimer() {
 	for {
 		if seconds == 0 {
 			if firstTime {
-				seconds = 3
+				seconds = 11
 				firstTime = false
 			} else {
 				CanStart = true
