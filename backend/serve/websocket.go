@@ -34,6 +34,7 @@ type RespMove struct {
 	Id    int    `json:"id"`
 	Name  string `json:"pseudo"`
 	Key   string `json:"key"`
+	Text  string `json:"text"`
 }
 type Message struct {
 	Id     int    `json:"id"`
@@ -116,24 +117,21 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				seconds = 10
 				firstTime = false
 			}
-			// case "time":
-			// 	go startTimer()
-			// 	// Gérer le temps
-			// 	resp := ResponseTime{State: "time", Time: seconds}
-			// 	fmt.Println("Temps dans reponse ", seconds)
-			// 	if err := ws.WriteJSON(resp); err != nil {
-			// 		// Gérer l'erreur d'écriture et nettoyer la connexion
-			// 		// delete(Gamers, idplayer)
-			// 		return
-			// 	}
+
 		case "move":
 			resp := RespMove{State: "move", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Key: m.Content["key"].(string)}
 			broadcast(resp, Gamers)
-			// fmt.Println(resp)
-
 		case "dead":
-			resp := RespMove{State: "dead", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string)}
-			fmt.Println(resp)
+			var resp RespMove
+			for id, _ := range Gamers {
+				if id == int(m.Content["id"].(float64)) {
+					delete(Gamers, id)
+					resp = RespMove{State: "dead", Id: id, Name: m.Content["pseudo"].(string), Text: "Your Lose"}
+				}
+			}
+			if len(Gamers) == 1 {
+				resp = RespMove{State: "dead", Id: int(m.Content["id"].(float64)), Name: m.Content["pseudo"].(string), Text: "Win"}
+			}
 			broadcast(resp, Gamers)
 
 		case "message":
@@ -157,8 +155,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 func broadcast(resp interface{}, gamers map[int]*websocket.Conn) {
 	for _, gamer := range gamers {
 		if err := gamer.WriteJSON(resp); err != nil {
-			// Gérer l'erreur d'écriture et nettoyer les connexions
-			// delete(Gamers, idplayer)
 			return
 		}
 	}
@@ -168,16 +164,13 @@ var firstTime bool = true
 
 func startTimer(gamers map[int]*websocket.Conn) {
 	var CanStart = false
-	// Créez un canal pour recevoir des signaux chaque seconde
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
-
-	// Compteur pour suivre le nombre de secondes écoulées
 
 	for {
 		if seconds == 0 {
 			if firstTime {
-				seconds = 1
+				seconds = 3
 				firstTime = false
 			} else {
 				CanStart = true
@@ -197,31 +190,3 @@ func startTimer(gamers map[int]*websocket.Conn) {
 		}
 	}
 }
-
-// func startTimer() {
-//     ticker := time.NewTicker(time.Second)
-//     defer ticker.Stop()
-
-//     for {
-// 		if seconds == 0 {
-// 			break
-// 		}
-//         select {
-//         case <-ticker.C:
-//             seconds-- // Assurez-vous que ceci est correct selon votre logique de décompte
-//             fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
-
-//             // Envoyez le temps restant à tous les clients
-//             resp := ResponseTime{State: "time", Time: seconds}
-//             broadcast(resp)
-//         }
-//     }
-// }
-
-// func sendRemainingTime() {
-//     // Créez un objet contenant le temps restant
-//     resp := ResponseTime{State: "time", Time: seconds}
-
-//     // Utilisez la fonction broadcast pour envoyer le message à tous les clients
-//     broadcast(resp)
-// }
