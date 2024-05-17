@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -42,7 +41,6 @@ func RenderMap() [][]int {
 				}
 			}
 		}
-		fmt.Println(mapBoard[i])
 	}
 	return mapBoard
 }

@@ -77,7 +77,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 	for {
 		_, msg, err := ws.ReadMessage()
 		if err != nil {
-			// Gérer l'erreur de lecture et nettoyer la connexion
 			delete(Gamers, idplayer)
 			return
 		}
@@ -89,10 +88,8 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		switch m.Type {
-		case "login":
-			// Gérer le login du joueur
+		case "login":	
 			if !firstTime {
-				fmt.Println("Cannot join")
 				return
 			}
 			player := Player{Id: idplayer, Name: m.Content["pseudo"].(string)}
@@ -104,8 +101,6 @@ func handleConnections(w http.ResponseWriter, r *http.Request) {
 				"name": player.Name,
 			}
 			mapBoard = RenderMap()
-			// resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard}
-
 			resp := Response{State: "join", Players: players, DataResp: dataResp, Map: mapBoard, MapBonus: mapBoard, Id: player.Id, Name: player.Name, Time: seconds}
 			broadcast(resp, Gamers)
 
@@ -182,8 +177,6 @@ func startTimer(gamers map[int]*websocket.Conn) {
 		select {
 		case <-ticker.C:
 			seconds--
-			fmt.Printf("Temps écoulé : %d seconde(s)\n", seconds)
-			fmt.Println("-----------------------------", len(gamers))
 			resp := ResponseTime{State: "time", Time: seconds, CanStart: CanStart}
 			broadcast(resp, gamers)
 
